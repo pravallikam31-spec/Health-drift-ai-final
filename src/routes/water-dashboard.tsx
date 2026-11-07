@@ -1,5 +1,6 @@
 import * as React from "react";
 import { createFileRoute } from "@tanstack/react-router";
+import { Capacitor, registerPlugin } from "@capacitor/core";
 import { AuthGate } from "@/components/auth/AuthGate";
 import { ProfileCheck } from "@/components/auth/ProfileCheck";
 import { useAuth } from "@/lib/auth-context";
@@ -13,6 +14,7 @@ import { db } from "@/lib/firebase";
 import { collection, doc, getDoc, getDocs, query, where, orderBy, addDoc, serverTimestamp, setDoc, Timestamp } from "firebase/firestore";
 import { ArrowLeft } from "lucide-react";
 import { format } from "date-fns";
+import { toast } from "sonner";
 
 export const Route = createFileRoute("/water-dashboard")({
   component: WaterDashboardPage,
@@ -41,6 +43,16 @@ type ReminderSettings = {
   minutes: number;
 };
 
+interface WaterReminderPlugin {
+  scheduleReminder(options: { hours: number; minutes: number }): Promise<void>;
+  cancelReminder(): Promise<void>;
+  requestNotificationPermission(): Promise<{ granted?: boolean } | void>;
+  getPendingWaterReminderActions(): Promise<{ tokens: string[] }>;
+  acknowledgeWaterReminderAction(options: { token: string }): Promise<void>;
+}
+
+const waterReminderPlugin = registerPlugin<WaterReminderPlugin>("WaterReminder");
+
 function WaterDashboard() {
   const { user } = useAuth();
   const navigate = useNavigate();
@@ -52,6 +64,7 @@ function WaterDashboard() {
   const [loading, setLoading] = React.useState(true);
   const [savingGoal, setSavingGoal] = React.useState(false);
   const [savingSettings, setSavingSettings] = React.useState(false);
+  const processingReminderActions = React.useRef(false);
 
   const userId = user?.uid;
   const today = format(new Date(), "yyyy-MM-dd");
@@ -114,6 +127,64 @@ function WaterDashboard() {
 
     loadWaterData();
   }, [userId, today]);
+
+  React.useEffect(() => {
+    if (
+      !userId ||
+      !Capacitor.isNativePlatform() ||
+      !Capacitor.isPluginAvailable("WaterReminder")
+    ) {
+      return;
+    }
+
+    async function processReminderActions() {
+      if (processingReminderActions.current) return;
+      processingReminderActions.current = true;
+
+      let savedActions = false;
+      try {
+        const { tokens } = await waterReminderPlugin.getPendingWaterReminderActions();
+        for (const token of tokens) {
+          if (!/^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(token)) {
+            console.error("Ignoring invalid water reminder action token", token);
+            continue;
+          }
+
+          const waterLogRef = doc(db, "users", userId, "waterLogs", token);
+          await setDoc(waterLogRef, {
+            amount: 200,
+            amountMl: 200,
+            date: format(new Date(), "yyyy-MM-dd"),
+            timestamp: serverTimestamp(),
+            userId,
+          });
+          await waterReminderPlugin.acknowledgeWaterReminderAction({ token });
+          savedActions = true;
+        }
+      } catch (error) {
+        console.error("Failed to process water reminder action", error);
+        toast.error("Could not save your water reminder response. It will be retried.");
+      } finally {
+        processingReminderActions.current = false;
+      }
+
+      if (savedActions) {
+        try {
+          await loadEntries(userId, format(new Date(), "yyyy-MM-dd"));
+        } catch (error) {
+          console.error("Water reminder entry was saved but the dashboard did not refresh", error);
+          toast.error("Your water entry was saved, but the dashboard could not refresh.");
+        }
+      }
+    }
+
+    void processReminderActions();
+    const interval = window.setInterval(() => {
+      void processReminderActions();
+    }, 5_000);
+
+    return () => window.clearInterval(interval);
+  }, [userId]);
 
   async function loadEntries(uid: string, currentDate: string) {
     const entriesRef = collection(db, "users", uid, "waterLogs");
@@ -186,19 +257,112 @@ function WaterDashboard() {
     setCustomAmount("");
   }
 
-  async function updateReminderSettings(updatedSettings: ReminderSettings) {
+  async function saveReminderSettings(uid: string, updatedSettings: ReminderSettings) {
+    const reminderRef = doc(db, "users", uid, "waterReminderSettings", "settings");
+    await setDoc(reminderRef, {
+      enabled: updatedSettings.enabled,
+      hours: updatedSettings.hours,
+      minutes: updatedSettings.minutes,
+    }, { merge: true });
+  }
+
+  async function updateReminderSettings(
+    updatedSettings: ReminderSettings,
+    action: "toggle" | "save" = "save",
+  ) {
     if (!userId) return;
+
+    const nativePlatform = Capacitor.isNativePlatform();
+    const nativeAvailable =
+      nativePlatform && Capacitor.isPluginAvailable("WaterReminder");
     setSavingSettings(true);
+
     try {
-      const reminderRef = doc(db, "users", userId, "waterReminderSettings", "settings");
-      await setDoc(reminderRef, {
-        enabled: updatedSettings.enabled,
-        hours: updatedSettings.hours,
-        minutes: updatedSettings.minutes,
-      }, { merge: true });
+      if (!updatedSettings.enabled) {
+        let cancellationError: unknown;
+        if (nativeAvailable) {
+          try {
+            await waterReminderPlugin.cancelReminder();
+          } catch (error) {
+            cancellationError = error;
+            console.error("Failed to cancel native water reminder", error);
+          }
+        }
+
+        await saveReminderSettings(userId, updatedSettings);
+        setSettings(updatedSettings);
+        if (cancellationError) {
+          toast.error("Water reminders were disabled, but the scheduled notification could not be canceled.");
+        } else if (action === "toggle") {
+          toast.success("Water reminders disabled.");
+        }
+        return;
+      }
+
+      const totalMinutes = updatedSettings.hours * 60 + updatedSettings.minutes;
+      if (
+        !Number.isFinite(updatedSettings.hours) ||
+        !Number.isFinite(updatedSettings.minutes) ||
+        updatedSettings.hours < 0 ||
+        updatedSettings.minutes < 0 ||
+        updatedSettings.minutes > 59 ||
+        totalMinutes <= 0
+      ) {
+        toast.error("Choose a reminder interval greater than zero.");
+        return;
+      }
+
+      if (nativeAvailable) {
+        let permission: { granted?: boolean } | void;
+        try {
+          permission = await waterReminderPlugin.requestNotificationPermission();
+        } catch (error) {
+          console.error("Water reminder notification permission was not granted", error);
+          const disabledSettings = { ...updatedSettings, enabled: false };
+          setSettings(disabledSettings);
+          await saveReminderSettings(userId, disabledSettings);
+          toast.error("Notifications are disabled. Allow notification permission to enable water reminders.");
+          return;
+        }
+
+        if (permission && permission.granted === false) {
+          const disabledSettings = { ...updatedSettings, enabled: false };
+          setSettings(disabledSettings);
+          await saveReminderSettings(userId, disabledSettings);
+          toast.error("Notifications are disabled. Allow notification permission to enable water reminders.");
+          return;
+        }
+
+        try {
+          await waterReminderPlugin.scheduleReminder({
+            hours: updatedSettings.hours,
+            minutes: updatedSettings.minutes,
+          });
+        } catch (error) {
+          console.error("Failed to schedule native water reminder", error);
+          const disabledSettings = { ...updatedSettings, enabled: false };
+          setSettings(disabledSettings);
+          await saveReminderSettings(userId, disabledSettings);
+          toast.error("Could not schedule water reminders. The reminder has been disabled.");
+          return;
+        }
+      }
+
+      await saveReminderSettings(userId, updatedSettings);
       setSettings(updatedSettings);
+
+      if (nativeAvailable) {
+        toast.success("Water reminder scheduled.");
+      } else if (nativePlatform) {
+        toast.error("Native water reminders are unavailable on this device. Your settings were saved, but no notification was scheduled.");
+      }
     } catch (error) {
       console.error("Failed to save reminder settings", error);
+      toast.error(
+        error instanceof Error
+          ? error.message
+          : "Could not update water reminder settings.",
+      );
     } finally {
       setSavingSettings(false);
     }
@@ -353,7 +517,10 @@ function WaterDashboard() {
                   type="checkbox"
                   className="h-4 w-4 rounded border-input bg-background"
                   checked={settings.enabled}
-                  onChange={(event) => updateReminderSettings({ ...settings, enabled: event.target.checked })}
+                  onChange={(event) => updateReminderSettings(
+                    { ...settings, enabled: event.target.checked },
+                    "toggle",
+                  )}
                 />
                 <Label htmlFor="notifyEnabled">Enable reminders</Label>
               </div>
@@ -389,7 +556,7 @@ function WaterDashboard() {
                     />
                   </div>
                 </div>
-                <div className="text-sm text-muted-foreground mt-2">Next Reminder: {settings.enabled ? (() => {
+                <div className="text-sm text-muted-foreground mt-2">Expected reminder time (approximate): {settings.enabled ? (() => {
                   try {
                     const now = new Date();
                     const totalMinutes = (Number(settings.hours) || 0) * 60 + (Number(settings.minutes) || 0);
@@ -400,7 +567,7 @@ function WaterDashboard() {
                   }
                 })() : "Disabled"}</div>
               </div>
-              <div className="text-sm text-muted-foreground">Water reminders are saved for future hydration notifications.</div>
+              <div className="text-sm text-muted-foreground">WorkManager may delay reminders based on device conditions.</div>
               <Button type="button" disabled={savingSettings} onClick={() => updateReminderSettings(settings)}>
                 {savingSettings ? "Saving..." : "Save Reminder Settings"}
               </Button>

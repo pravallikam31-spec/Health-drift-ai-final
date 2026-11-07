@@ -7,14 +7,14 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { db } from "@/lib/firebase";
 import { collection, doc, getDocs, limit, orderBy, query, serverTimestamp, setDoc, Timestamp } from "firebase/firestore";
 import { toast } from "sonner";
-import { 
+import {
   Camera, CloudUpload, Loader2, RotateCcw, Save, Sparkles, UtensilsCrossed, 
   ArrowLeft, TrendingUp, Zap, ListChecks, Share2, History, Flame
 } from "lucide-react";
 import { useAuth } from "@/lib/auth-context";
 import { format } from "date-fns";
 
-const FOOD_RECOGNITION_API_URL = "http://127.0.0.1:5000/predict";
+const FOOD_RECOGNITION_API_URL = "http://192.168.1.45:5000/predict";
 const FOOD_RECOGNITION_UNAVAILABLE_MESSAGE =
   "Food recognition service is unavailable. Please make sure the Flask server is running.";
 
@@ -386,7 +386,7 @@ export function FoodDashboard() {
     <div className="relative min-h-screen bg-background text-foreground antialiased p-4 sm:p-8 pb-32">
       <AuroraBackground />
       <div className="relative z-10 max-w-7xl mx-auto space-y-8">
-        
+
         {/* HEADER */}
         <div className="flex items-center justify-between gap-4 flex-wrap">
           <div className="flex items-center gap-4">
@@ -422,7 +422,6 @@ export function FoodDashboard() {
                 <input
                   type="file"
                   accept="image/*"
-                  capture="environment"
                   className="hidden"
                   onChange={(e) => {
                     const file = e.target.files?.[0];

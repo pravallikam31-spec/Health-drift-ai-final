@@ -7,15 +7,45 @@ yarn-error.log*
 pnpm-debug.log*
 lerna-debug.log*
 
-node_modules
-/backend/.venv/
-dist
+node_modules/
+.venv/
+venv/
+dist/
+build/
+**/build/
+**/.gradle/
+android/local.properties
 dist-ssr
 .output
 .vinxi
 .tanstack/**
 .nitro
 *.local
+
+# Environment files and credentials
+.env
+.env.*
+!.env.example
+!.env.*.example
+*.env
+!*.env.example
+**/*service-account*.json
+**/*firebase-adminsdk*.json
+*.pem
+*.p12
+*.pfx
+*.keystore
+*.jks
+*.key
+
+# Python caches and temporary files
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+*.tmp
+*.temp
 
 # Wrangler / Cloudflare
 .wrangler/

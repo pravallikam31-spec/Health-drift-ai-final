@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">Health Drift AI</string>
+    <string name="title_activity_main">Health Drift AI</string>
+    <string name="package_name">com.healthdrift.ai</string>
+    <string name="custom_url_scheme">com.healthdrift.ai</string>
+</resources>

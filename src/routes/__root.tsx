@@ -1,15 +1,26 @@
+import * as React from "react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import {
   Outlet,
   Link,
   createRootRouteWithContext,
+  useNavigate,
   useRouter,
+  useRouterState,
   HeadContent,
   Scripts,
 } from "@tanstack/react-router";
+import { Capacitor, registerPlugin } from "@capacitor/core";
 
 import appCss from "../styles.css?url";
 import { Toaster } from "@/components/ui/sonner";
+
+interface WaterReminderNavigationPlugin {
+  hasPendingWaterReminderAction(): Promise<{ pending: boolean }>;
+}
+
+const waterReminderNavigationPlugin =
+  registerPlugin<WaterReminderNavigationPlugin>("WaterReminder");
 
 function NotFoundComponent() {
   return (
@@ -114,6 +125,42 @@ function RootShell({ children }: { children: React.ReactNode }) {
 
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
+  const navigate = useNavigate();
+  const pathname = useRouterState({ select: (state) => state.location.pathname });
+
+  React.useEffect(() => {
+    if (!Capacitor.isNativePlatform() || !Capacitor.isPluginAvailable("WaterReminder")) {
+      return;
+    }
+
+    let active = true;
+    const checkPendingAction = async () => {
+      try {
+        const { pending } =
+          await waterReminderNavigationPlugin.hasPendingWaterReminderAction();
+        if (
+          active &&
+          pending &&
+          pathname !== "/water-dashboard" &&
+          pathname !== "/profile"
+        ) {
+          await navigate({ to: "/water-dashboard" });
+        }
+      } catch (error) {
+        console.error("Unable to check for pending water reminder actions", error);
+      }
+    };
+
+    void checkPendingAction();
+    const interval = window.setInterval(() => {
+      void checkPendingAction();
+    }, 3_000);
+
+    return () => {
+      active = false;
+      window.clearInterval(interval);
+    };
+  }, [navigate, pathname]);
 
   return (
     <QueryClientProvider client={queryClient}>
