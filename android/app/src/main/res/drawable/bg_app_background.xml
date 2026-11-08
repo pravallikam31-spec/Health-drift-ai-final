@@ -1,0 +1,38 @@
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item>
+        <shape android:shape="rectangle">
+            <gradient
+                android:angle="270"
+                android:startColor="@color/sleep_background_secondary"
+                android:endColor="@color/sleep_background_main" />
+        </shape>
+    </item>
+    <item
+        android:width="360dp"
+        android:height="360dp"
+        android:gravity="top|end">
+        <shape android:shape="rectangle">
+            <gradient
+                android:type="radial"
+                android:gradientRadius="240dp"
+                android:centerX="0.8"
+                android:centerY="0.15"
+                android:startColor="#298B5CF6"
+                android:endColor="#00070B18" />
+        </shape>
+    </item>
+    <item
+        android:width="320dp"
+        android:height="320dp"
+        android:gravity="bottom|start">
+        <shape android:shape="rectangle">
+            <gradient
+                android:type="radial"
+                android:gradientRadius="220dp"
+                android:centerX="0.1"
+                android:centerY="0.85"
+                android:startColor="#1F22D3EE"
+                android:endColor="#00070B18" />
+        </shape>
+    </item>
+</layer-list>

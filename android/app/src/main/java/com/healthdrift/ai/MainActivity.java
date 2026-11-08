@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.util.Log;
 import androidx.core.app.NotificationManagerCompat;
 import com.getcapacitor.BridgeActivity;
+import com.healthdrift.ai.sleep.SleepTrackerPlugin;
 import com.healthdrift.ai.water.WaterReminderActionReceiver;
 import com.healthdrift.ai.water.WaterReminderPendingActions;
 import com.healthdrift.ai.water.WaterReminderPlugin;
@@ -14,6 +15,7 @@ public class MainActivity extends BridgeActivity {
     @Override
     public void onCreate(android.os.Bundle savedInstanceState) {
         registerPlugin(WaterReminderPlugin.class);
+        registerPlugin(SleepTrackerPlugin.class);
         handleWaterReminderAction(getIntent());
         super.onCreate(savedInstanceState);
     }

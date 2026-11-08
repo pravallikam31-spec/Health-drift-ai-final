@@ -1,0 +1,7 @@
+<shape xmlns:android="http://schemas.android.com/apk/res/android">
+    <solid android:color="@color/sleep_card_glass" />
+    <stroke
+        android:width="1dp"
+        android:color="@color/sleep_border_glass" />
+    <corners android:radius="20dp" />
+</shape>

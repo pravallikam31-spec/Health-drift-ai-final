@@ -159,6 +159,24 @@ function readFileAsImageData(file: File) {
   });
 }
 
+function getCameraErrorMessage(error: unknown) {
+  const errorName = error instanceof Error ? error.name : "";
+  if (errorName === "NotAllowedError" || errorName === "PermissionDeniedError") {
+    return "Camera permission was denied. Allow camera access for Health Drift AI in Android Settings, then try again.";
+  }
+  if (errorName === "NotFoundError" || errorName === "DevicesNotFoundError") {
+    return "No camera was found on this device. You can upload a meal image instead.";
+  }
+  if (errorName === "NotReadableError" || errorName === "TrackStartError") {
+    return "The camera is unavailable or being used by another app. Close other camera apps and try again.";
+  }
+  if (errorName === "SecurityError") {
+    return "Camera access is blocked in this context. Open the installed app or use a secure HTTPS page.";
+  }
+  if (error instanceof Error && error.message) return error.message;
+  return "Unable to access the camera. Check camera permissions or upload a meal image instead.";
+}
+
 export function FoodDashboard() {
   const { user } = useAuth();
   const navigate = useNavigate();
@@ -226,8 +244,12 @@ export function FoodDashboard() {
 
   async function startCamera() {
     setCameraError(null);
+    let stream: MediaStream | null = null;
     try {
-      const stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: "environment" }, audio: false });
+      if (!navigator.mediaDevices?.getUserMedia) {
+        throw new Error("Camera access is unavailable in this context. Open the installed app or use a secure HTTPS page.");
+      }
+      stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: "environment" }, audio: false });
       streamRef.current = stream;
       setCameraActive(true);
       setStreamReady(true);
@@ -235,9 +257,14 @@ export function FoodDashboard() {
         videoRef.current.srcObject = stream;
         await videoRef.current.play();
       }
-    } catch (error: any) {
-      setCameraError(error?.message ?? "Unable to access camera.");
-      toast.error("Camera access failed.");
+    } catch (error: unknown) {
+      stream?.getTracks().forEach((track) => track.stop());
+      streamRef.current = null;
+      setCameraActive(false);
+      setStreamReady(false);
+      const message = getCameraErrorMessage(error);
+      setCameraError(message);
+      toast.error(message);
     }
   }
 

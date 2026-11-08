@@ -1,6 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
 
+    <uses-permission android:name="android.permission.ACTIVITY_RECOGNITION" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_HEALTH" />
+    <uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM" />
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -25,6 +30,28 @@
 
         </activity>
 
+        <activity
+            android:name=".sleep.SleepTrackerActivity"
+            android:exported="false"
+            android:theme="@style/SleepTrackerTheme" />
+
+        <service
+            android:name=".sleep.SleepMonitoringService"
+            android:exported="false"
+            android:foregroundServiceType="health" />
+
+        <receiver
+            android:name=".sleep.SleepAlarmReceiver"
+            android:exported="false" />
+
+        <receiver
+            android:name=".sleep.SleepResponseReceiver"
+            android:exported="false" />
+
+        <receiver
+            android:name=".sleep.WakeUpAlarmReceiver"
+            android:exported="false" />
+
         <receiver
             android:name=".water.WaterReminderActionReceiver"
             android:exported="false" />
@@ -43,5 +70,7 @@
     <!-- Permissions -->
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+    <uses-feature android:name="android.hardware.camera" android:required="false" />
 </manifest>

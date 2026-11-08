@@ -1,0 +1,14 @@
+<resources>
+    <style name="SleepTrackerTheme" parent="Theme.Material3.Dark.NoActionBar">
+        <item name="colorPrimary">@color/sleep_primary_blue</item>
+        <item name="colorSecondary">@color/sleep_electric_cyan</item>
+        <item name="colorTertiary">@color/sleep_purple_accent</item>
+        <item name="colorSurface">@color/sleep_background_secondary</item>
+        <item name="android:colorAccent">@color/sleep_electric_cyan</item>
+        <item name="android:windowBackground">@color/sleep_background_main</item>
+        <item name="android:statusBarColor">@color/sleep_background_main</item>
+        <item name="android:navigationBarColor">@color/sleep_background_main</item>
+        <item name="android:windowLightStatusBar">false</item>
+        <item name="android:windowLightNavigationBar">false</item>
+    </style>
+</resources>

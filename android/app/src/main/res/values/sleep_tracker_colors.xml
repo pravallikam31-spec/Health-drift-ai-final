@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="sleep_background_main">#070B18</color>
+    <color name="sleep_background_secondary">#0B1224</color>
+    <color name="sleep_card_glass">#BF121D35</color>
+    <color name="sleep_primary_blue">#3B82F6</color>
+    <color name="sleep_electric_cyan">#22D3EE</color>
+    <color name="sleep_purple_accent">#8B5CF6</color>
+    <color name="sleep_text_primary">#F8FAFC</color>
+    <color name="sleep_text_secondary">#94A3B8</color>
+    <color name="sleep_border_glass">#2E60A5FA</color>
+    <color name="sleep_success">#34D399</color>
+    <color name="sleep_warning">#FBBF24</color>
+    <color name="sleep_error">#FB7185</color>
+</resources>
