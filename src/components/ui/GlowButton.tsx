@@ -13,10 +13,8 @@ export const GlowButton = forwardRef<HTMLButtonElement, Props>(
         className={cn(
           "group relative inline-flex items-center gap-2 rounded-full px-7 py-3.5 text-sm font-medium tracking-wide transition-all duration-500",
           "focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/60",
-          variant === "primary" &&
-            "text-primary-foreground bg-pulse hover:scale-[1.02] glow-cyan",
-          variant === "ghost" &&
-            "text-foreground glass-strong hover:bg-white/10",
+          variant === "primary" && "text-primary-foreground bg-pulse hover:scale-[1.02] glow-cyan",
+          variant === "ghost" && "text-foreground glass-strong hover:bg-white/10",
           className,
         )}
         {...rest}

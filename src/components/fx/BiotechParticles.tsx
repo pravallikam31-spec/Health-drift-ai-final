@@ -1,7 +1,12 @@
 import { useEffect, useRef } from "react";
 
 interface Particle {
-  x: number; y: number; vx: number; vy: number; r: number; hue: number;
+  x: number;
+  y: number;
+  vx: number;
+  vy: number;
+  r: number;
+  hue: number;
 }
 
 export function BiotechParticles() {
@@ -43,7 +48,10 @@ export function BiotechParticles() {
       mouse.current.x = e.clientX * dpr;
       mouse.current.y = e.clientY * dpr;
     };
-    const leave = () => { mouse.current.x = -9999; mouse.current.y = -9999; };
+    const leave = () => {
+      mouse.current.x = -9999;
+      mouse.current.y = -9999;
+    };
     window.addEventListener("pointermove", move);
     window.addEventListener("pointerleave", leave);
     window.addEventListener("resize", resize);
@@ -56,7 +64,8 @@ export function BiotechParticles() {
         const p = particles[i];
         for (let j = i + 1; j < particles.length; j++) {
           const q = particles[j];
-          const dx = p.x - q.x, dy = p.y - q.y;
+          const dx = p.x - q.x,
+            dy = p.y - q.y;
           const d2 = dx * dx + dy * dy;
           const max = 140 * dpr;
           if (d2 < max * max) {
@@ -82,10 +91,14 @@ export function BiotechParticles() {
           p.vx += (dx / Math.sqrt(d2 + 0.01)) * f * 0.2;
           p.vy += (dy / Math.sqrt(d2 + 0.01)) * f * 0.2;
         }
-        p.vx *= 0.985; p.vy *= 0.985;
-        p.x += p.vx; p.y += p.vy;
-        if (p.x < 0) p.x = canvas.width; else if (p.x > canvas.width) p.x = 0;
-        if (p.y < 0) p.y = canvas.height; else if (p.y > canvas.height) p.y = 0;
+        p.vx *= 0.985;
+        p.vy *= 0.985;
+        p.x += p.vx;
+        p.y += p.vy;
+        if (p.x < 0) p.x = canvas.width;
+        else if (p.x > canvas.width) p.x = 0;
+        if (p.y < 0) p.y = canvas.height;
+        else if (p.y > canvas.height) p.y = 0;
 
         const grd = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, p.r * 6);
         grd.addColorStop(0, `oklch(0.9 0.18 ${p.hue} / 0.9)`);

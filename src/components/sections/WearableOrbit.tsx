@@ -21,13 +21,15 @@ export function WearableOrbit() {
           transition={{ duration: 0.8 }}
           className="max-w-3xl"
         >
-          <span className="text-[10px] uppercase tracking-[0.28em] text-primary">06 · Wearable Integration</span>
+          <span className="text-[10px] uppercase tracking-[0.28em] text-primary">
+            06 · Wearable Integration
+          </span>
           <h2 className="mt-4 font-display text-[clamp(2rem,4vw,3.5rem)] font-light leading-[1.05] tracking-tight">
             One body, <span className="text-aurora">every signal.</span>
           </h2>
           <p className="mt-6 max-w-xl text-muted-foreground leading-relaxed">
-            Nexus ingests over 40 device protocols natively — fusing them into a single
-            continuous physiological stream. No app switching. No CSV exports.
+            Nexus ingests over 40 device protocols natively — fusing them into a single continuous
+            physiological stream. No app switching. No CSV exports.
           </p>
         </motion.div>
 
@@ -59,9 +61,13 @@ export function WearableOrbit() {
               <div className="absolute inset-0 rounded-full bg-pulse blur-3xl opacity-60 animate-pulse-soft" />
               <div className="absolute inset-4 rounded-full bg-background border border-white/10 grid place-items-center">
                 <div className="text-center">
-                  <div className="font-mono-display text-[10px] uppercase tracking-[0.3em] text-muted-foreground">You</div>
+                  <div className="font-mono-display text-[10px] uppercase tracking-[0.3em] text-muted-foreground">
+                    You
+                  </div>
                   <div className="mt-2 font-display text-4xl text-aurora">94.2</div>
-                  <div className="mt-1 text-[10px] uppercase tracking-[0.2em] text-muted-foreground">Sync Score</div>
+                  <div className="mt-1 text-[10px] uppercase tracking-[0.2em] text-muted-foreground">
+                    Sync Score
+                  </div>
                 </div>
               </div>
             </div>
@@ -87,19 +93,29 @@ export function WearableOrbit() {
                   transform: "translate(-50%, -50%)",
                 }}
               >
-                <GlassCard strong className="px-4 py-3 min-w-[150px] animate-float-y" style={{ animationDelay: `${i * 0.4}s` }}>
+                <GlassCard
+                  strong
+                  className="px-4 py-3 min-w-[150px] animate-float-y"
+                  style={{ animationDelay: `${i * 0.4}s` }}
+                >
                   <div className="flex items-center gap-2">
                     <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-pulse-soft" />
                     <span className="text-xs font-medium text-foreground">{d.name}</span>
                   </div>
-                  <div className="mt-1 text-[10px] uppercase tracking-[0.18em] text-muted-foreground">{d.metric}</div>
+                  <div className="mt-1 text-[10px] uppercase tracking-[0.18em] text-muted-foreground">
+                    {d.metric}
+                  </div>
                 </GlassCard>
               </motion.div>
             );
           })}
 
           {/* Connection beams */}
-          <svg className="absolute inset-0 h-full w-full pointer-events-none" viewBox="0 0 100 100" preserveAspectRatio="none">
+          <svg
+            className="absolute inset-0 h-full w-full pointer-events-none"
+            viewBox="0 0 100 100"
+            preserveAspectRatio="none"
+          >
             <defs>
               <linearGradient id="beam" x1="0" x2="1">
                 <stop offset="0%" stopColor="oklch(0.82 0.16 220)" stopOpacity="0" />
@@ -111,7 +127,17 @@ export function WearableOrbit() {
               const rad = (d.angle * Math.PI) / 180;
               const x = 50 + Math.cos(rad) * 44;
               const y = 50 + Math.sin(rad) * 44 * 0.72;
-              return <line key={i} x1="50" y1="50" x2={x} y2={y} stroke="url(#beam)" strokeWidth="0.15" />;
+              return (
+                <line
+                  key={i}
+                  x1="50"
+                  y1="50"
+                  x2={x}
+                  y2={y}
+                  stroke="url(#beam)"
+                  strokeWidth="0.15"
+                />
+              );
             })}
           </svg>
         </div>

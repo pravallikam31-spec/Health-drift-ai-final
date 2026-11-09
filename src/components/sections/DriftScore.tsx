@@ -27,7 +27,9 @@ export function DriftScore() {
           transition={{ duration: 0.8 }}
           className="text-center max-w-3xl mx-auto"
         >
-          <span className="text-[10px] uppercase tracking-[0.28em] text-primary">07 · Drift Score</span>
+          <span className="text-[10px] uppercase tracking-[0.28em] text-primary">
+            07 · Drift Score
+          </span>
           <h2 className="mt-4 font-display text-[clamp(2rem,4vw,3.5rem)] font-light leading-[1.05] tracking-tight">
             One number for <span className="text-aurora">your trajectory.</span>
           </h2>
@@ -47,11 +49,22 @@ export function DriftScore() {
                   <stop offset="0%" stopColor="oklch(0.82 0.16 220)" />
                   <stop offset="100%" stopColor="oklch(0.65 0.22 290)" />
                 </linearGradient>
-                <filter id="ring-glow"><feGaussianBlur stdDeviation="4" /></filter>
+                <filter id="ring-glow">
+                  <feGaussianBlur stdDeviation="4" />
+                </filter>
               </defs>
-              <circle cx="170" cy="170" r={r} fill="none" stroke="oklch(1 0 0 / 0.06)" strokeWidth="14" />
+              <circle
+                cx="170"
+                cy="170"
+                r={r}
+                fill="none"
+                stroke="oklch(1 0 0 / 0.06)"
+                strokeWidth="14"
+              />
               <motion.circle
-                cx="170" cy="170" r={r}
+                cx="170"
+                cy="170"
+                r={r}
                 fill="none"
                 stroke="url(#ring)"
                 strokeWidth="14"
@@ -63,7 +76,9 @@ export function DriftScore() {
                 transition={{ duration: 2, ease: [0.16, 1, 0.3, 1], delay: 0.3 }}
               />
               <motion.circle
-                cx="170" cy="170" r={r}
+                cx="170"
+                cy="170"
+                r={r}
                 fill="none"
                 stroke="url(#ring)"
                 strokeWidth="14"
@@ -79,8 +94,12 @@ export function DriftScore() {
             </svg>
             <div className="absolute inset-0 grid place-items-center">
               <div className="text-center">
-                <div className="font-display text-7xl font-light text-aurora tabular-nums">{score}</div>
-                <div className="mt-1 text-[10px] uppercase tracking-[0.28em] text-muted-foreground">Drift Score</div>
+                <div className="font-display text-7xl font-light text-aurora tabular-nums">
+                  {score}
+                </div>
+                <div className="mt-1 text-[10px] uppercase tracking-[0.28em] text-muted-foreground">
+                  Drift Score
+                </div>
                 <div className="mt-3 font-mono-display text-xs text-emerald-400">↑ +6.1 · 30d</div>
               </div>
             </div>
@@ -102,8 +121,14 @@ export function DriftScore() {
                   style={{ transform: `translate(calc(-50% + ${x}px), calc(-50% + ${y}px))` }}
                 >
                   <GlassCard className="px-4 py-2.5 whitespace-nowrap">
-                    <div className="text-[10px] uppercase tracking-[0.18em] text-muted-foreground">{f.name}</div>
-                    <div className={`mt-0.5 font-mono-display text-xs ${f.positive ? "text-emerald-400" : "text-destructive"}`}>{f.delta}</div>
+                    <div className="text-[10px] uppercase tracking-[0.18em] text-muted-foreground">
+                      {f.name}
+                    </div>
+                    <div
+                      className={`mt-0.5 font-mono-display text-xs ${f.positive ? "text-emerald-400" : "text-destructive"}`}
+                    >
+                      {f.delta}
+                    </div>
                   </GlassCard>
                 </motion.div>
               );
@@ -114,7 +139,9 @@ export function DriftScore() {
           <div className="mt-10 grid grid-cols-2 gap-3 md:hidden w-full">
             {factors.map((f) => (
               <GlassCard key={f.name} className="px-3 py-2">
-                <div className="text-[10px] uppercase tracking-[0.18em] text-muted-foreground">{f.name}</div>
+                <div className="text-[10px] uppercase tracking-[0.18em] text-muted-foreground">
+                  {f.name}
+                </div>
                 <div className="font-mono-display text-xs text-emerald-400">{f.delta}</div>
               </GlassCard>
             ))}

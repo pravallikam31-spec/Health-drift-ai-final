@@ -42,10 +42,10 @@ export function Hero() {
             transition={{ duration: 1, ease, delay: 0.3 }}
             className="mt-8 max-w-xl text-base md:text-lg leading-relaxed text-muted-foreground"
           >
-            Nexus reads your biology in real time — genomic markers, wearable signals,
-            and continuous biometrics — to forecast chronic disease risk{" "}
-            <span className="text-foreground/90">months, sometimes years</span>, before
-            the first symptom appears.
+            Nexus reads your biology in real time — genomic markers, wearable signals, and
+            continuous biometrics — to forecast chronic disease risk{" "}
+            <span className="text-foreground/90">months, sometimes years</span>, before the first
+            symptom appears.
           </motion.p>
 
           <motion.div
@@ -57,12 +57,19 @@ export function Hero() {
             <GlowButton>
               Begin diagnostic scan
               <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
-                <path d="M1 7h12m0 0L8 2m5 5L8 12" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
+                <path
+                  d="M1 7h12m0 0L8 2m5 5L8 12"
+                  stroke="currentColor"
+                  strokeWidth="1.5"
+                  strokeLinecap="round"
+                />
               </svg>
             </GlowButton>
             <GlowButton variant="ghost">
               <span className="grid h-5 w-5 place-items-center rounded-full border border-foreground/30">
-                <svg width="7" height="7" viewBox="0 0 7 7"><path d="M1 0v7l6-3.5z" fill="currentColor" /></svg>
+                <svg width="7" height="7" viewBox="0 0 7 7">
+                  <path d="M1 0v7l6-3.5z" fill="currentColor" />
+                </svg>
               </span>
               Watch the science
             </GlowButton>
@@ -81,7 +88,9 @@ export function Hero() {
             ].map((s) => (
               <div key={s.v}>
                 <div className="font-display text-2xl text-foreground">{s.k}</div>
-                <div className="mt-1 text-[10px] uppercase tracking-[0.2em] text-muted-foreground">{s.v}</div>
+                <div className="mt-1 text-[10px] uppercase tracking-[0.2em] text-muted-foreground">
+                  {s.v}
+                </div>
               </div>
             ))}
           </motion.div>
@@ -131,8 +140,8 @@ export function Hero() {
               </div>
               <div className="mt-3 text-sm leading-relaxed text-foreground/90">
                 Cardiac drift detected.{" "}
-                <span className="text-aurora font-medium">Atrial fibrillation</span>{" "}
-                signal — 14 days earlier than clinical threshold.
+                <span className="text-aurora font-medium">Atrial fibrillation</span> signal — 14
+                days earlier than clinical threshold.
               </div>
               <div className="mt-4 flex items-center justify-between">
                 <div className="flex items-center gap-2">
@@ -141,7 +150,9 @@ export function Hero() {
                   </div>
                   <span className="font-mono-display text-[10px] text-foreground">0.78</span>
                 </div>
-                <span className="text-[10px] uppercase tracking-[0.18em] text-muted-foreground">confidence</span>
+                <span className="text-[10px] uppercase tracking-[0.18em] text-muted-foreground">
+                  confidence
+                </span>
               </div>
             </GlassCard>
           </motion.div>
@@ -154,7 +165,9 @@ export function Hero() {
             style={{ animation: "float-y 8s ease-in-out infinite", animationDelay: "2s" }}
           >
             <GlassCard strong glow="violet" className="p-4">
-              <div className="text-[10px] uppercase tracking-[0.22em] text-muted-foreground">Drift Score</div>
+              <div className="text-[10px] uppercase tracking-[0.22em] text-muted-foreground">
+                Drift Score
+              </div>
               <div className="mt-2 flex items-end gap-1">
                 <span className="font-display text-4xl font-light text-aurora">82</span>
                 <span className="mb-1 text-[10px] font-mono-display text-emerald-400">+4.2</span>

@@ -21,4 +21,42 @@ export default (env: { mode: string; command: "build" | "serve" }) =>
           }
         : {}),
     },
+    vite: {
+      server: {
+        proxy: {
+          "/api/predict": {
+            target: process.env.FLASK_BACKEND_URL || "http://127.0.0.1:5000",
+            changeOrigin: true,
+            rewrite: (path: string) => path.replace(/^\/api/, ""),
+          },
+        },
+      },
+      plugins: [
+        {
+          name: "rolldown-to-rollup-shim",
+          enforce: "post",
+          config(config: Record<string, unknown>) {
+            const envs = config.environments as
+              | Record<string, { build?: { rolldownOptions?: unknown; rollupOptions?: unknown } }>
+              | undefined;
+            if (envs) {
+              for (const envName of Object.keys(envs)) {
+                const envConf = envs[envName];
+                if (envConf?.build?.rolldownOptions && !envConf.build.rollupOptions) {
+                  envConf.build.rollupOptions = envConf.build.rolldownOptions;
+                }
+              }
+            }
+          },
+          configEnvironment(
+            name: string,
+            config: { build?: { rolldownOptions?: unknown; rollupOptions?: unknown } },
+          ) {
+            if (config.build?.rolldownOptions && !config.build.rollupOptions) {
+              config.build.rollupOptions = config.build.rolldownOptions;
+            }
+          },
+        },
+      ],
+    },
   })(env);

@@ -41,14 +41,21 @@ const conditions = [
 ];
 
 function MiniChart({ data }: { data: number[] }) {
-  const min = Math.min(...data), max = Math.max(...data);
+  const min = Math.min(...data),
+    max = Math.max(...data);
   const range = max - min || 1;
   const points = data
     .map((v, i) => `${(i / (data.length - 1)) * 100},${100 - ((v - min) / range) * 100}`)
     .join(" ");
   return (
     <svg viewBox="0 0 100 100" preserveAspectRatio="none" className="h-full w-full">
-      <polyline points={points} fill="none" stroke="url(#mini-grad)" strokeWidth="2" vectorEffect="non-scaling-stroke" />
+      <polyline
+        points={points}
+        fill="none"
+        stroke="url(#mini-grad)"
+        strokeWidth="2"
+        vectorEffect="non-scaling-stroke"
+      />
       <defs>
         <linearGradient id="mini-grad" x1="0" x2="1">
           <stop offset="0%" stopColor="oklch(0.82 0.16 220)" />
@@ -70,14 +77,16 @@ export function ChronicMonitor() {
           transition={{ duration: 0.8 }}
           className="max-w-3xl"
         >
-          <span className="text-[10px] uppercase tracking-[0.28em] text-primary">04 · Chronic Monitoring</span>
+          <span className="text-[10px] uppercase tracking-[0.28em] text-primary">
+            04 · Chronic Monitoring
+          </span>
           <h2 className="mt-4 font-display text-[clamp(2rem,4vw,3.5rem)] font-light leading-[1.05] tracking-tight">
             Continuous vigilance, <br />
             <span className="text-aurora">zero alarm fatigue.</span>
           </h2>
           <p className="mt-6 max-w-xl text-muted-foreground leading-relaxed">
-            Every chronic condition has its own signature. Nexus learns yours — then quietly
-            watches the curve, only speaking up when the trajectory changes.
+            Every chronic condition has its own signature. Nexus learns yours — then quietly watches
+            the curve, only speaking up when the trajectory changes.
           </p>
         </motion.div>
 
@@ -90,8 +99,13 @@ export function ChronicMonitor() {
               viewport={{ once: true, margin: "-80px" }}
               transition={{ duration: 0.7, delay: i * 0.08, ease: [0.16, 1, 0.3, 1] }}
             >
-              <GlassCard strong className="group relative h-[280px] p-6 flex flex-col overflow-hidden">
-                <div className={`absolute -top-12 -right-12 h-32 w-32 rounded-full bg-gradient-to-br ${c.color} opacity-20 blur-2xl transition-opacity duration-500 group-hover:opacity-40`} />
+              <GlassCard
+                strong
+                className="group relative h-[280px] p-6 flex flex-col overflow-hidden"
+              >
+                <div
+                  className={`absolute -top-12 -right-12 h-32 w-32 rounded-full bg-gradient-to-br ${c.color} opacity-20 blur-2xl transition-opacity duration-500 group-hover:opacity-40`}
+                />
                 <div className="flex items-center gap-2 text-[10px] uppercase tracking-[0.2em] text-muted-foreground">
                   <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-pulse-soft" />
                   {c.status}
@@ -101,7 +115,9 @@ export function ChronicMonitor() {
                   <span className="font-display text-5xl font-light text-aurora">{c.value}</span>
                   <span className="font-mono-display text-xs text-muted-foreground">{c.unit}</span>
                 </div>
-                <div className="text-[10px] uppercase tracking-[0.18em] text-muted-foreground mt-1">{c.metric}</div>
+                <div className="text-[10px] uppercase tracking-[0.18em] text-muted-foreground mt-1">
+                  {c.metric}
+                </div>
                 <div className="mt-auto h-12 -mx-2">
                   <MiniChart data={c.series} />
                 </div>

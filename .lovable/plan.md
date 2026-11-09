@@ -1,4 +1,3 @@
-
 # Plan: NEXUS — Predictive Healthcare AI Experience
 
 A single immersive landing experience inspired by FITTR.com, tuned for a luxury biotech / predictive healthcare brand. Dark, cinematic, alive — not a SaaS template.

@@ -26,7 +26,7 @@ export function ProfileCheck({ children }: { children: React.ReactNode }) {
 
       try {
         let hasProfile = false;
-        
+
         if (profileCache[user.uid]) {
           hasProfile = true;
         } else {
@@ -37,7 +37,7 @@ export function ProfileCheck({ children }: { children: React.ReactNode }) {
             profileCache[user.uid] = true;
           }
         }
-        
+
         if (!hasProfile && routerState.location.pathname !== "/profile") {
           navigate({ to: "/profile", replace: true });
         } else if (hasProfile && routerState.location.pathname === "/profile") {

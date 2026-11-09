@@ -27,10 +27,11 @@ function ProfileContent() {
         <div className="mb-8 text-center">
           <h1 className="font-display text-2xl mb-2">Create Profile</h1>
           <p className="text-sm text-muted-foreground">
-            Welcome to Nexus Health Drift AI. Let's set up your profile to personalize your experience.
+            Welcome to Nexus Health Drift AI. Let's set up your profile to personalize your
+            experience.
           </p>
         </div>
-        
+
         <ProfileForm />
       </div>
     </div>

@@ -1,0 +1,6 @@
+{
+  "name": "HealthDrift AI",
+  "description": "Comprehensive metabolic drift and health intelligence monitoring platform with real-time biometric tracking, sleep, hydration, and nutrition analytics.",
+  "permissions": [],
+  "capabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

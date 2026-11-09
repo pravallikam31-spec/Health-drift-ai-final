@@ -39,8 +39,12 @@ function StepsDashboard() {
               <ArrowLeft className="w-5 h-5" />
             </button>
             <div>
-              <h1 className="font-display text-4xl sm:text-5xl mb-2 text-aurora">🚶 Steps Dashboard</h1>
-              <p className="text-muted-foreground">Track your daily steps, activity progress, and walking goals.</p>
+              <h1 className="font-display text-4xl sm:text-5xl mb-2 text-aurora">
+                🚶 Steps Dashboard
+              </h1>
+              <p className="text-muted-foreground">
+                Track your daily steps, activity progress, and walking goals.
+              </p>
             </div>
           </div>
         </div>
@@ -117,7 +121,10 @@ function StepsDashboard() {
                 { label: "Saturday", value: "0" },
                 { label: "Sunday", value: "0" },
               ].map((item) => (
-                <div key={item.label} className="rounded-3xl border border-white/10 bg-black/20 p-4">
+                <div
+                  key={item.label}
+                  className="rounded-3xl border border-white/10 bg-black/20 p-4"
+                >
                   <div className="text-sm text-muted-foreground mb-2">{item.label}</div>
                   <div className="text-2xl font-semibold">{item.value}</div>
                 </div>
@@ -133,9 +140,15 @@ function StepsDashboard() {
           </CardHeader>
           <CardContent className="space-y-4">
             <div className="flex flex-col sm:flex-row gap-3">
-              <Button type="button" className="w-full sm:w-auto">Add Steps Manually</Button>
-              <Button type="button" variant="outline" className="w-full sm:w-auto">View History</Button>
-              <Button type="button" variant="outline" className="w-full sm:w-auto">Weekly Report</Button>
+              <Button type="button" className="w-full sm:w-auto">
+                Add Steps Manually
+              </Button>
+              <Button type="button" variant="outline" className="w-full sm:w-auto">
+                View History
+              </Button>
+              <Button type="button" variant="outline" className="w-full sm:w-auto">
+                Weekly Report
+              </Button>
             </div>
             <p className="text-sm text-muted-foreground">Ready for Integration</p>
           </CardContent>
@@ -156,10 +169,14 @@ function StepsDashboard() {
                 "Wearables",
                 "Smart Watches",
               ].map((item) => (
-                <li key={item} className="rounded-2xl border border-white/10 bg-black/10 p-4">{item}</li>
+                <li key={item} className="rounded-2xl border border-white/10 bg-black/10 p-4">
+                  {item}
+                </li>
               ))}
             </ul>
-            <p className="text-sm text-muted-foreground">This screen is ready for future integration without needing design changes.</p>
+            <p className="text-sm text-muted-foreground">
+              This screen is ready for future integration without needing design changes.
+            </p>
           </CardContent>
         </Card>
       </div>

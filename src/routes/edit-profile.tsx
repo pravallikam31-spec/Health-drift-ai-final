@@ -4,8 +4,12 @@ import { AuthGate } from "@/components/auth/AuthGate";
 import { useAuth } from "@/lib/auth-context";
 import { AuroraBackground } from "@/components/fx/AuroraBackground";
 import { ProfileForm, ProfileData } from "@/components/profile/ProfileForm";
+import { GlowButton } from "@/components/ui/GlowButton";
 import { db } from "@/lib/firebase";
 import { doc, getDoc } from "firebase/firestore";
+import { useNavigate } from "@tanstack/react-router";
+import { LogOut } from "lucide-react";
+import { toast } from "sonner";
 
 export const Route = createFileRoute("/edit-profile")({
   component: EditProfilePage,
@@ -20,9 +24,24 @@ function EditProfilePage() {
 }
 
 function EditProfileContent() {
-  const { user } = useAuth();
+  const { user, logout } = useAuth();
+  const navigate = useNavigate();
   const [initialData, setInitialData] = React.useState<ProfileData | null>(null);
   const [loading, setLoading] = React.useState(true);
+  const [loggingOut, setLoggingOut] = React.useState(false);
+
+  const handleLogout = async () => {
+    setLoggingOut(true);
+    try {
+      await logout();
+      await navigate({ to: "/dashboard" });
+    } catch (error) {
+      console.error("Error logging out:", error);
+      toast.error("Unable to log out. Please try again.");
+    } finally {
+      setLoggingOut(false);
+    }
+  };
 
   React.useEffect(() => {
     async function fetchProfile() {
@@ -52,12 +71,25 @@ function EditProfileContent() {
             Update your personal and health information.
           </p>
         </div>
-        
+
         {loading ? (
           <div className="text-center text-muted-foreground py-10">Loading profile...</div>
         ) : (
           <ProfileForm initialData={initialData} />
         )}
+
+        <div className="mt-10 border-t border-white/10 pt-6">
+          <GlowButton
+            type="button"
+            variant="ghost"
+            onClick={handleLogout}
+            disabled={loggingOut}
+            className="w-full justify-center border border-rose-400/30 bg-rose-500/10 text-rose-200 hover:bg-rose-500/20"
+          >
+            <LogOut className="mr-2 h-4 w-4" />
+            {loggingOut ? "Logging out..." : "Logout"}
+          </GlowButton>
+        </div>
       </div>
     </div>
   );

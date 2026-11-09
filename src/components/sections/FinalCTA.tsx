@@ -43,15 +43,20 @@ export function FinalCTA() {
             <span className="text-aurora font-medium">screams.</span>
           </h2>
           <p className="mt-8 max-w-xl mx-auto text-base md:text-lg text-muted-foreground leading-relaxed">
-            Join the first 10,000 members shaping the future of predictive medicine.
-            Limited cohort. Concierge onboarding. Lifetime access.
+            Join the first 10,000 members shaping the future of predictive medicine. Limited cohort.
+            Concierge onboarding. Lifetime access.
           </p>
 
           <div className="mt-12 flex flex-wrap justify-center gap-4">
-            <GlowButton onClick={() => navigate({ to: '/dashboard' })}>
+            <GlowButton onClick={() => navigate({ to: "/dashboard" })}>
               Login
               <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
-                <path d="M1 7h12m0 0L8 2m5 5L8 12" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
+                <path
+                  d="M1 7h12m0 0L8 2m5 5L8 12"
+                  stroke="currentColor"
+                  strokeWidth="1.5"
+                  strokeLinecap="round"
+                />
               </svg>
             </GlowButton>
           </div>

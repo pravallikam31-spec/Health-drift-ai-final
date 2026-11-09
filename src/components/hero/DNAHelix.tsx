@@ -19,8 +19,13 @@ function Helix() {
       const angle = t * Math.PI * 2 * turns;
       const y = (t - 0.5) * height;
       const a = new THREE.Vector3(Math.cos(angle) * radius, y, Math.sin(angle) * radius);
-      const b = new THREE.Vector3(Math.cos(angle + Math.PI) * radius, y, Math.sin(angle + Math.PI) * radius);
-      sa.push(a); sb.push(b);
+      const b = new THREE.Vector3(
+        Math.cos(angle + Math.PI) * radius,
+        y,
+        Math.sin(angle + Math.PI) * radius,
+      );
+      sa.push(a);
+      sb.push(b);
       if (i % 4 === 0) r.push({ a, b });
     }
     return { spheresA: sa, spheresB: sb, rungs: r };
@@ -69,7 +74,10 @@ function Helix() {
         const mid = r.a.clone().add(r.b).multiplyScalar(0.5);
         const dir = r.b.clone().sub(r.a);
         const len = dir.length();
-        const quat = new THREE.Quaternion().setFromUnitVectors(new THREE.Vector3(0, 1, 0), dir.clone().normalize());
+        const quat = new THREE.Quaternion().setFromUnitVectors(
+          new THREE.Vector3(0, 1, 0),
+          dir.clone().normalize(),
+        );
         return (
           <mesh key={`r${i}`} position={mid} quaternion={quat}>
             <cylinderGeometry args={[0.025, 0.025, len, 8]} />

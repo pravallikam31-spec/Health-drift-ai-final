@@ -2,9 +2,27 @@ import * as React from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { db } from "@/lib/firebase";
-import { collection, doc, getDocs, limit, orderBy, query, serverTimestamp, setDoc, Timestamp } from "firebase/firestore";
+import {
+  collection,
+  doc,
+  getDocs,
+  limit,
+  orderBy,
+  query,
+  serverTimestamp,
+  setDoc,
+  Timestamp,
+} from "firebase/firestore";
 import { toast } from "sonner";
-import { Camera, CloudUpload, Loader2, RotateCcw, Save, Sparkles, UtensilsCrossed } from "lucide-react";
+import {
+  Camera,
+  CloudUpload,
+  Loader2,
+  RotateCcw,
+  Save,
+  Sparkles,
+  UtensilsCrossed,
+} from "lucide-react";
 import { pipeline } from "@xenova/transformers";
 
 const INDIAN_FOOD_LABELS = [
@@ -42,7 +60,10 @@ const INDIAN_FOOD_LABELS = [
   "Sweets",
 ];
 
-const NUTRITION_PRESETS: Record<string, { calories: number; protein: number; carbs: number; fat: number; serving: string }> = {
+const NUTRITION_PRESETS: Record<
+  string,
+  { calories: number; protein: number; carbs: number; fat: number; serving: string }
+> = {
   Idli: { calories: 58, protein: 2, carbs: 12, fat: 0.4, serving: "1 Idli" },
   Dosa: { calories: 168, protein: 4, carbs: 24, fat: 6, serving: "1 Dosa" },
   "Masala Dosa": { calories: 380, protein: 8, carbs: 52, fat: 14, serving: "1 Dosa" },
@@ -91,11 +112,20 @@ type MealEntry = Nutrition & {
   timestamp: Timestamp | null;
 };
 
-function classifyServingSize(foodName: string, confidence: number, imageSize: { width: number; height: number }) {
+function classifyServingSize(
+  foodName: string,
+  confidence: number,
+  imageSize: { width: number; height: number },
+) {
   const area = imageSize.width * imageSize.height;
   const portionScale = confidence > 0.7 ? 1 : confidence > 0.45 ? 0.75 : 0.6;
 
-  if (foodName.includes("Biryani") || foodName.includes("Thali") || foodName.includes("Rice") || foodName.includes("Pulav")) {
+  if (
+    foodName.includes("Biryani") ||
+    foodName.includes("Thali") ||
+    foodName.includes("Rice") ||
+    foodName.includes("Pulav")
+  ) {
     return area > 750000 ? "1 Plate" : area > 350000 ? "1 Bowl" : "1 Serving";
   }
 
@@ -107,7 +137,12 @@ function classifyServingSize(foodName: string, confidence: number, imageSize: { 
     return area > 700000 ? `2 ${foodName === "Uttapam" ? "Uttapams" : "Dosas"}` : `1 ${foodName}`;
   }
 
-  if (foodName.includes("Curry") || foodName === "Dal" || foodName === "Sambar" || foodName === "Rasam") {
+  if (
+    foodName.includes("Curry") ||
+    foodName === "Dal" ||
+    foodName === "Sambar" ||
+    foodName === "Rasam"
+  ) {
     return area > 500000 ? "1.5 Bowls" : "1 Bowl";
   }
 
@@ -115,7 +150,17 @@ function classifyServingSize(foodName: string, confidence: number, imageSize: { 
 }
 
 function scaleNutrition(base: Nutrition, servingSize: string, confidence: number) {
-  const multiplier = servingSize.includes("2 ") ? 2 : servingSize.includes("1.5") ? 1.5 : servingSize.includes("Small") ? 0.7 : confidence > 0.7 ? 1 : confidence > 0.45 ? 0.85 : 0.75;
+  const multiplier = servingSize.includes("2 ")
+    ? 2
+    : servingSize.includes("1.5")
+      ? 1.5
+      : servingSize.includes("Small")
+        ? 0.7
+        : confidence > 0.7
+          ? 1
+          : confidence > 0.45
+            ? 0.85
+            : 0.75;
   return {
     calories: Math.round(base.calories * multiplier),
     protein: Math.round(base.protein * multiplier * 10) / 10,
@@ -127,11 +172,15 @@ function scaleNutrition(base: Nutrition, servingSize: string, confidence: number
 function normalizePrediction(label: string) {
   const exact = INDIAN_FOOD_LABELS.find((entry) => entry.toLowerCase() === label.toLowerCase());
   if (exact) return exact;
-  const sanitized = label.toLowerCase().replace(/[^a-z\s]/g, "").trim();
+  const sanitized = label
+    .toLowerCase()
+    .replace(/[^a-z\s]/g, "")
+    .trim();
   if (sanitized.includes("masala dosa")) return "Masala Dosa";
   if (sanitized.includes("dosa")) return "Dosa";
   if (sanitized.includes("idli")) return "Idli";
-  if (sanitized.includes("biryani")) return sanitized.includes("chicken") ? "Chicken Biryani" : "Biryani";
+  if (sanitized.includes("biryani"))
+    return sanitized.includes("chicken") ? "Chicken Biryani" : "Biryani";
   if (sanitized.includes("paneer butter")) return "Paneer Butter Masala";
   if (sanitized.includes("paneer")) return "Paneer Curry";
   if (sanitized.includes("chicken curry")) return "Chicken Curry";
@@ -158,7 +207,11 @@ function normalizePrediction(label: string) {
   return "Rice";
 }
 
-function buildMealNutrition(label: string, confidence: number, imageSize: { width: number; height: number }): Nutrition {
+function buildMealNutrition(
+  label: string,
+  confidence: number,
+  imageSize: { width: number; height: number },
+): Nutrition {
   const foodName = normalizePrediction(label);
   const base = NUTRITION_PRESETS[foodName] ?? NUTRITION_PRESETS.Rice;
   const servingSize = classifyServingSize(foodName, confidence, imageSize);
@@ -246,7 +299,10 @@ export function FoodIntakeModule({ userId }: { userId: string }) {
     let cancelled = false;
     async function loadClassifier() {
       try {
-        const classifier = await pipeline("zero-shot-image-classification", "Xenova/clip-vit-base-patch32");
+        const classifier = await pipeline(
+          "zero-shot-image-classification",
+          "Xenova/clip-vit-base-patch32",
+        );
         if (!cancelled) {
           classifierRef.current = classifier;
           setModelReady(true);
@@ -281,7 +337,10 @@ export function FoodIntakeModule({ userId }: { userId: string }) {
   async function startCamera() {
     setCameraError(null);
     try {
-      const stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: "environment" }, audio: false });
+      const stream = await navigator.mediaDevices.getUserMedia({
+        video: { facingMode: "environment" },
+        audio: false,
+      });
       streamRef.current = stream;
       setCameraActive(true);
       setStreamReady(true);
@@ -307,7 +366,9 @@ export function FoodIntakeModule({ userId }: { userId: string }) {
     if (!classifier) {
       throw new Error("Model not ready");
     }
-    const output = await classifier(source, INDIAN_FOOD_LABELS, { hypothesis_template: "This image contains {} food" });
+    const output = await classifier(source, INDIAN_FOOD_LABELS, {
+      hypothesis_template: "This image contains {} food",
+    });
     const best = Array.isArray(output) ? output[0] : output;
     return buildMealNutrition(best.label, best.score, imageSize);
   }
@@ -399,7 +460,9 @@ export function FoodIntakeModule({ userId }: { userId: string }) {
       <div className="flex items-center justify-between gap-4 flex-wrap">
         <div>
           <h2 className="text-3xl font-display">Food Intake</h2>
-          <p className="text-muted-foreground mt-2">Capture a meal, detect the dish, estimate serving size, and save nutrition to Firestore.</p>
+          <p className="text-muted-foreground mt-2">
+            Capture a meal, detect the dish, estimate serving size, and save nutrition to Firestore.
+          </p>
         </div>
         <div className="flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-4 py-2 text-sm text-muted-foreground">
           <Sparkles className="h-4 w-4 text-amber-400" />
@@ -437,7 +500,12 @@ export function FoodIntakeModule({ userId }: { userId: string }) {
                 />
               </label>
               {cameraActive && (
-                <Button type="button" variant="outline" onClick={captureFromCamera} disabled={busy || analyzing}>
+                <Button
+                  type="button"
+                  variant="outline"
+                  onClick={captureFromCamera}
+                  disabled={busy || analyzing}
+                >
                   <Camera className="h-4 w-4" /> Capture Photo
                 </Button>
               )}
@@ -447,18 +515,33 @@ export function FoodIntakeModule({ userId }: { userId: string }) {
 
             <div className="rounded-2xl border border-dashed border-white/15 bg-black/20 p-3">
               {cameraActive ? (
-                <video ref={videoRef} className="aspect-video w-full rounded-xl bg-black object-cover" playsInline muted />
+                <video
+                  ref={videoRef}
+                  className="aspect-video w-full rounded-xl bg-black object-cover"
+                  playsInline
+                  muted
+                />
               ) : imageSrc ? (
-                <img src={imageSrc} alt="Captured meal" className="aspect-video w-full rounded-xl object-cover" />
+                <img
+                  src={imageSrc}
+                  alt="Captured meal"
+                  className="aspect-video w-full rounded-xl object-cover"
+                />
               ) : (
                 <div className="grid aspect-video place-items-center rounded-xl text-sm text-muted-foreground">
-                  {analyzing ? "Analyzing image..." : "Camera preview or uploaded image will appear here."}
+                  {analyzing
+                    ? "Analyzing image..."
+                    : "Camera preview or uploaded image will appear here."}
                 </div>
               )}
             </div>
 
             <div className="flex items-center gap-2 text-sm text-muted-foreground">
-              {analyzing ? <Loader2 className="h-4 w-4 animate-spin" /> : <RotateCcw className="h-4 w-4" />}
+              {analyzing ? (
+                <Loader2 className="h-4 w-4 animate-spin" />
+              ) : (
+                <RotateCcw className="h-4 w-4" />
+              )}
               {analyzing ? "Running food detection" : "Ready to analyze meal image"}
             </div>
           </CardContent>
@@ -477,7 +560,8 @@ export function FoodIntakeModule({ userId }: { userId: string }) {
               <StatTile label="Fat" value={`${totalToday.fat} g`} />
             </div>
             <div className="rounded-2xl border border-white/10 bg-black/20 p-4 text-sm text-muted-foreground">
-              Food logs are stored under <span className="text-foreground">food_logs/{`{uid}`}/entries</span>.
+              Food logs are stored under{" "}
+              <span className="text-foreground">food_logs/{`{uid}`}/entries</span>.
             </div>
           </CardContent>
         </Card>
@@ -527,10 +611,15 @@ export function FoodIntakeModule({ userId }: { userId: string }) {
         </CardHeader>
         <CardContent className="space-y-3">
           {mealEntries.length === 0 ? (
-            <div className="rounded-2xl border border-white/10 bg-black/20 p-4 text-sm text-muted-foreground">No meals saved yet.</div>
+            <div className="rounded-2xl border border-white/10 bg-black/20 p-4 text-sm text-muted-foreground">
+              No meals saved yet.
+            </div>
           ) : (
             mealEntries.slice(0, 5).map((entry, index) => (
-              <div key={`${entry.foodName}-${index}`} className="flex items-center justify-between rounded-2xl border border-white/10 bg-black/20 p-4 text-sm">
+              <div
+                key={`${entry.foodName}-${index}`}
+                className="flex items-center justify-between rounded-2xl border border-white/10 bg-black/20 p-4 text-sm"
+              >
                 <div>
                   <div className="font-medium text-foreground">{entry.foodName}</div>
                   <div className="text-muted-foreground">{entry.servingSize}</div>

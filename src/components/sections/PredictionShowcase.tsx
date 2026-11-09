@@ -5,10 +5,20 @@ import { GlassCard } from "@/components/ui/GlassCard";
 const Heart3D = lazy(() => import("./Heart3D").then((m) => ({ default: m.Heart3D })));
 
 const predictions = [
-  { name: "Cardiovascular Disease", risk: 18, window: "24 months", color: "from-rose-400 to-rose-600" },
+  {
+    name: "Cardiovascular Disease",
+    risk: 18,
+    window: "24 months",
+    color: "from-rose-400 to-rose-600",
+  },
   { name: "Type 2 Diabetes", risk: 42, window: "18 months", color: "from-amber-400 to-orange-500" },
   { name: "Hypertension", risk: 67, window: "6 months", color: "from-fuchsia-400 to-violet-500" },
-  { name: "Chronic Stress and Burnout", risk: 9, window: "5+ years", color: "from-cyan-400 to-sky-500" },
+  {
+    name: "Chronic Stress and Burnout",
+    risk: 9,
+    window: "5+ years",
+    color: "from-cyan-400 to-sky-500",
+  },
 ];
 
 export function PredictionShowcase() {
@@ -53,16 +63,18 @@ export function PredictionShowcase() {
             viewport={{ once: true, margin: "-100px" }}
             transition={{ duration: 0.8 }}
           >
-            <span className="text-[10px] uppercase tracking-[0.28em] text-primary">02 · Prediction Engine</span>
+            <span className="text-[10px] uppercase tracking-[0.28em] text-primary">
+              02 · Prediction Engine
+            </span>
             <h2 className="mt-4 font-display text-[clamp(2rem,4vw,3.5rem)] font-light leading-[1.05] tracking-tight">
               The diseases of tomorrow,
               <br />
               <span className="text-aurora">visible today.</span>
             </h2>
             <p className="mt-6 max-w-md text-muted-foreground leading-relaxed">
-              The Nexus engine cross-references 1,400+ biomarkers against a living atlas of
-              42 million longitudinal health records — surfacing risk trajectories long before
-              they cross a clinical threshold.
+              The Nexus engine cross-references 1,400+ biomarkers against a living atlas of 42
+              million longitudinal health records — surfacing risk trajectories long before they
+              cross a clinical threshold.
             </p>
           </motion.div>
 
@@ -89,7 +101,11 @@ export function PredictionShowcase() {
                           initial={{ width: 0 }}
                           whileInView={{ width: `${p.risk}%` }}
                           viewport={{ once: true }}
-                          transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1], delay: 0.2 + i * 0.08 }}
+                          transition={{
+                            duration: 1.2,
+                            ease: [0.16, 1, 0.3, 1],
+                            delay: 0.2 + i * 0.08,
+                          }}
                           className={`h-full bg-gradient-to-r ${p.color}`}
                         />
                       </div>

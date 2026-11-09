@@ -15,9 +15,7 @@ function HeartPlane() {
     const t = state.clock.elapsedTime;
     // double-pump heartbeat
     const beat =
-      1 +
-      Math.max(0, Math.sin(t * 2.4)) * 0.06 +
-      Math.max(0, Math.sin(t * 2.4 - 0.4)) * 0.035;
+      1 + Math.max(0, Math.sin(t * 2.4)) * 0.06 + Math.max(0, Math.sin(t * 2.4 - 0.4)) * 0.035;
     if (group.current) {
       group.current.scale.setScalar(beat);
       // subtle parallax wobble for depth

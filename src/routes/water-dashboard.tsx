@@ -11,7 +11,19 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { db } from "@/lib/firebase";
-import { collection, doc, getDoc, getDocs, query, where, orderBy, addDoc, serverTimestamp, setDoc, Timestamp } from "firebase/firestore";
+import {
+  collection,
+  doc,
+  getDoc,
+  getDocs,
+  query,
+  where,
+  orderBy,
+  addDoc,
+  serverTimestamp,
+  setDoc,
+  Timestamp,
+} from "firebase/firestore";
 import { ArrowLeft } from "lucide-react";
 import { format } from "date-fns";
 import { toast } from "sonner";
@@ -60,7 +72,11 @@ function WaterDashboard() {
   const [goalInput, setGoalInput] = React.useState<string>("");
   const [entries, setEntries] = React.useState<WaterEntry[]>([]);
   const [customAmount, setCustomAmount] = React.useState<string>("");
-  const [settings, setSettings] = React.useState<ReminderSettings>({ enabled: false, hours: 2, minutes: 0 });
+  const [settings, setSettings] = React.useState<ReminderSettings>({
+    enabled: false,
+    hours: 2,
+    minutes: 0,
+  });
   const [loading, setLoading] = React.useState(true);
   const [savingGoal, setSavingGoal] = React.useState(false);
   const [savingSettings, setSavingSettings] = React.useState(false);
@@ -77,7 +93,8 @@ function WaterDashboard() {
 
   const remaining = Math.max(goal - waterConsumed, 0);
   const progress = goal > 0 ? Math.min(Math.round((waterConsumed / goal) * 100), 100) : 0;
-  const hydrationStatus = progress >= 90 ? "Excellent" : progress >= 70 ? "Good" : progress >= 40 ? "Moderate" : "Low";
+  const hydrationStatus =
+    progress >= 90 ? "Excellent" : progress >= 70 ? "Good" : progress >= 40 ? "Moderate" : "Low";
 
   React.useEffect(() => {
     if (!userId) return;
@@ -129,11 +146,7 @@ function WaterDashboard() {
   }, [userId, today]);
 
   React.useEffect(() => {
-    if (
-      !userId ||
-      !Capacitor.isNativePlatform() ||
-      !Capacitor.isPluginAvailable("WaterReminder")
-    ) {
+    if (!userId || !Capacitor.isNativePlatform() || !Capacitor.isPluginAvailable("WaterReminder")) {
       return;
     }
 
@@ -145,7 +158,11 @@ function WaterDashboard() {
       try {
         const { tokens } = await waterReminderPlugin.getPendingWaterReminderActions();
         for (const token of tokens) {
-          if (!/^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(token)) {
+          if (
+            !/^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(
+              token,
+            )
+          ) {
             console.error("Ignoring invalid water reminder action token", token);
             continue;
           }
@@ -194,7 +211,10 @@ function WaterDashboard() {
       .map((docSnap) => {
         const data = docSnap.data() as Record<string, unknown>;
         const amountValue = Number(data.amountMl ?? data.amount ?? 0);
-        const timestampValue = data.timestamp && typeof data.timestamp === "object" && "toDate" in data.timestamp ? (data.timestamp as Timestamp) : null;
+        const timestampValue =
+          data.timestamp && typeof data.timestamp === "object" && "toDate" in data.timestamp
+            ? (data.timestamp as Timestamp)
+            : null;
         return {
           amount: Number.isFinite(amountValue) ? amountValue : 0,
           amountMl: Number.isFinite(amountValue) ? amountValue : 0,
@@ -259,11 +279,15 @@ function WaterDashboard() {
 
   async function saveReminderSettings(uid: string, updatedSettings: ReminderSettings) {
     const reminderRef = doc(db, "users", uid, "waterReminderSettings", "settings");
-    await setDoc(reminderRef, {
-      enabled: updatedSettings.enabled,
-      hours: updatedSettings.hours,
-      minutes: updatedSettings.minutes,
-    }, { merge: true });
+    await setDoc(
+      reminderRef,
+      {
+        enabled: updatedSettings.enabled,
+        hours: updatedSettings.hours,
+        minutes: updatedSettings.minutes,
+      },
+      { merge: true },
+    );
   }
 
   async function updateReminderSettings(
@@ -273,8 +297,7 @@ function WaterDashboard() {
     if (!userId) return;
 
     const nativePlatform = Capacitor.isNativePlatform();
-    const nativeAvailable =
-      nativePlatform && Capacitor.isPluginAvailable("WaterReminder");
+    const nativeAvailable = nativePlatform && Capacitor.isPluginAvailable("WaterReminder");
     setSavingSettings(true);
 
     try {
@@ -292,7 +315,9 @@ function WaterDashboard() {
         await saveReminderSettings(userId, updatedSettings);
         setSettings(updatedSettings);
         if (cancellationError) {
-          toast.error("Water reminders were disabled, but the scheduled notification could not be canceled.");
+          toast.error(
+            "Water reminders were disabled, but the scheduled notification could not be canceled.",
+          );
         } else if (action === "toggle") {
           toast.success("Water reminders disabled.");
         }
@@ -321,7 +346,9 @@ function WaterDashboard() {
           const disabledSettings = { ...updatedSettings, enabled: false };
           setSettings(disabledSettings);
           await saveReminderSettings(userId, disabledSettings);
-          toast.error("Notifications are disabled. Allow notification permission to enable water reminders.");
+          toast.error(
+            "Notifications are disabled. Allow notification permission to enable water reminders.",
+          );
           return;
         }
 
@@ -329,7 +356,9 @@ function WaterDashboard() {
           const disabledSettings = { ...updatedSettings, enabled: false };
           setSettings(disabledSettings);
           await saveReminderSettings(userId, disabledSettings);
-          toast.error("Notifications are disabled. Allow notification permission to enable water reminders.");
+          toast.error(
+            "Notifications are disabled. Allow notification permission to enable water reminders.",
+          );
           return;
         }
 
@@ -354,14 +383,14 @@ function WaterDashboard() {
       if (nativeAvailable) {
         toast.success("Water reminder scheduled.");
       } else if (nativePlatform) {
-        toast.error("Native water reminders are unavailable on this device. Your settings were saved, but no notification was scheduled.");
+        toast.error(
+          "Native water reminders are unavailable on this device. Your settings were saved, but no notification was scheduled.",
+        );
       }
     } catch (error) {
       console.error("Failed to save reminder settings", error);
       toast.error(
-        error instanceof Error
-          ? error.message
-          : "Could not update water reminder settings.",
+        error instanceof Error ? error.message : "Could not update water reminder settings.",
       );
     } finally {
       setSavingSettings(false);
@@ -369,7 +398,11 @@ function WaterDashboard() {
   }
 
   if (!userId) {
-    return <div className="min-h-screen bg-background text-muted-foreground grid place-items-center">Loading hydration dashboard...</div>;
+    return (
+      <div className="min-h-screen bg-background text-muted-foreground grid place-items-center">
+        Loading hydration dashboard...
+      </div>
+    );
   }
 
   return (
@@ -386,8 +419,12 @@ function WaterDashboard() {
               <ArrowLeft className="w-5 h-5" />
             </button>
             <div>
-              <h1 className="font-display text-4xl sm:text-5xl mb-2 text-aurora">💧 Water Dashboard</h1>
-              <p className="text-muted-foreground">Track hydration, water intake, and daily water goals.</p>
+              <h1 className="font-display text-4xl sm:text-5xl mb-2 text-aurora">
+                💧 Water Dashboard
+              </h1>
+              <p className="text-muted-foreground">
+                Track hydration, water intake, and daily water goals.
+              </p>
             </div>
           </div>
         </div>
@@ -438,15 +475,22 @@ function WaterDashboard() {
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="rounded-full bg-white/10 h-4 overflow-hidden">
-                <div className="h-4 rounded-full bg-cyan-400 transition-all" style={{ width: `${progress}%` }} />
+                <div
+                  className="h-4 rounded-full bg-cyan-400 transition-all"
+                  style={{ width: `${progress}%` }}
+                />
               </div>
               <div className="flex items-center justify-between text-sm text-muted-foreground">
-                <span>{waterConsumed} / {goal} ml</span>
+                <span>
+                  {waterConsumed} / {goal} ml
+                </span>
                 <span>{progress}%</span>
               </div>
               <div className="grid grid-cols-5 gap-2 text-center text-xs uppercase tracking-[0.2em] text-muted-foreground">
-                {['0%', '25%', '50%', '75%', '100%'].map((label) => (
-                  <div key={label} className="rounded-full border border-white/10 px-2 py-1">{label}</div>
+                {["0%", "25%", "50%", "75%", "100%"].map((label) => (
+                  <div key={label} className="rounded-full border border-white/10 px-2 py-1">
+                    {label}
+                  </div>
                 ))}
               </div>
             </CardContent>
@@ -460,7 +504,10 @@ function WaterDashboard() {
             <CardContent className="space-y-4">
               <div className="text-5xl font-semibold">{progress}%</div>
               <div className="text-lg text-muted-foreground">Status: {hydrationStatus}</div>
-              <p className="text-sm text-muted-foreground">Your hydration score is calculated from the percentage of your daily water goal completed.</p>
+              <p className="text-sm text-muted-foreground">
+                Your hydration score is calculated from the percentage of your daily water goal
+                completed.
+              </p>
             </CardContent>
           </Card>
         </div>
@@ -498,7 +545,11 @@ function WaterDashboard() {
                     onChange={(event) => setCustomAmount(event.target.value)}
                   />
                 </div>
-                <Button type="button" onClick={addCustomWater} disabled={!customAmount || Number(customAmount) <= 0}>
+                <Button
+                  type="button"
+                  onClick={addCustomWater}
+                  disabled={!customAmount || Number(customAmount) <= 0}
+                >
                   Add Water
                 </Button>
               </div>
@@ -517,10 +568,9 @@ function WaterDashboard() {
                   type="checkbox"
                   className="h-4 w-4 rounded border-input bg-background"
                   checked={settings.enabled}
-                  onChange={(event) => updateReminderSettings(
-                    { ...settings, enabled: event.target.checked },
-                    "toggle",
-                  )}
+                  onChange={(event) =>
+                    updateReminderSettings({ ...settings, enabled: event.target.checked }, "toggle")
+                  }
                 />
                 <Label htmlFor="notifyEnabled">Enable reminders</Label>
               </div>
@@ -556,19 +606,31 @@ function WaterDashboard() {
                     />
                   </div>
                 </div>
-                <div className="text-sm text-muted-foreground mt-2">Expected reminder time (approximate): {settings.enabled ? (() => {
-                  try {
-                    const now = new Date();
-                    const totalMinutes = (Number(settings.hours) || 0) * 60 + (Number(settings.minutes) || 0);
-                    const next = new Date(now.getTime() + totalMinutes * 60 * 1000);
-                    return format(next, "h:mm a");
-                  } catch (e) {
-                    return "--:--";
-                  }
-                })() : "Disabled"}</div>
+                <div className="text-sm text-muted-foreground mt-2">
+                  Expected reminder time (approximate):{" "}
+                  {settings.enabled
+                    ? (() => {
+                        try {
+                          const now = new Date();
+                          const totalMinutes =
+                            (Number(settings.hours) || 0) * 60 + (Number(settings.minutes) || 0);
+                          const next = new Date(now.getTime() + totalMinutes * 60 * 1000);
+                          return format(next, "h:mm a");
+                        } catch (e) {
+                          return "--:--";
+                        }
+                      })()
+                    : "Disabled"}
+                </div>
               </div>
-              <div className="text-sm text-muted-foreground">WorkManager may delay reminders based on device conditions.</div>
-              <Button type="button" disabled={savingSettings} onClick={() => updateReminderSettings(settings)}>
+              <div className="text-sm text-muted-foreground">
+                WorkManager may delay reminders based on device conditions.
+              </div>
+              <Button
+                type="button"
+                disabled={savingSettings}
+                onClick={() => updateReminderSettings(settings)}
+              >
                 {savingSettings ? "Saving..." : "Save Reminder Settings"}
               </Button>
             </CardContent>
@@ -584,12 +646,21 @@ function WaterDashboard() {
             {loading ? (
               <div className="text-sm text-muted-foreground">Loading entries...</div>
             ) : entries.length === 0 ? (
-              <div className="rounded-2xl border border-white/10 bg-black/20 p-4 text-sm text-muted-foreground text-center">No water entries yet today.</div>
+              <div className="rounded-2xl border border-white/10 bg-black/20 p-4 text-sm text-muted-foreground text-center">
+                No water entries yet today.
+              </div>
             ) : (
               <div className="space-y-2">
                 {entries.map((entry, index) => (
-                  <div key={`${entry.date}-${index}-${entry.amount}`} className="flex items-center justify-between rounded-2xl border border-white/10 bg-black/20 p-4 text-sm">
-                    <div>{entry.timestamp?.toDate ? format(entry.timestamp.toDate(), "h:mm a") : "--:--"}</div>
+                  <div
+                    key={`${entry.date}-${index}-${entry.amount}`}
+                    className="flex items-center justify-between rounded-2xl border border-white/10 bg-black/20 p-4 text-sm"
+                  >
+                    <div>
+                      {entry.timestamp?.toDate
+                        ? format(entry.timestamp.toDate(), "h:mm a")
+                        : "--:--"}
+                    </div>
                     <div className="font-medium">{entry.amount} ml</div>
                   </div>
                 ))}
@@ -604,13 +675,17 @@ function WaterDashboard() {
             <CardDescription>Continue your hydration journey.</CardDescription>
           </CardHeader>
           <CardContent className="flex flex-col sm:flex-row flex-wrap gap-3">
-            <Button type="button" onClick={() => document.getElementById("customAmount")?.focus()}>Add Water</Button>
-            <Button type="button" variant="outline" onClick={() => alert("Ready for Integration")}>View History</Button>
-            <Button type="button" variant="outline" onClick={() => alert("Ready for Integration")}>Weekly Hydration Report</Button>
+            <Button type="button" onClick={() => document.getElementById("customAmount")?.focus()}>
+              Add Water
+            </Button>
+            <Button type="button" variant="outline" onClick={() => alert("Ready for Integration")}>
+              View History
+            </Button>
+            <Button type="button" variant="outline" onClick={() => alert("Ready for Integration")}>
+              Weekly Hydration Report
+            </Button>
           </CardContent>
         </Card>
-
-        
       </div>
     </div>
   );

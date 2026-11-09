@@ -9,49 +9,25 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
-import { Route as WaterDashboardRouteImport } from './routes/water-dashboard'
-import { Route as StepsDashboardRouteImport } from './routes/steps-dashboard'
-import { Route as SleepDashboardRouteImport } from './routes/sleep-dashboard'
-import { Route as ProfileRouteImport } from './routes/profile'
-import { Route as MedicationDashboardRouteImport } from './routes/medication-dashboard'
-import { Route as FoodDashboardRouteImport } from './routes/food-dashboard'
-import { Route as EditProfileRouteImport } from './routes/edit-profile'
-import { Route as DashboardRouteImport } from './routes/dashboard'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AiAssistantRouteImport } from './routes/ai-assistant'
+import { Route as DashboardRouteImport } from './routes/dashboard'
+import { Route as EditProfileRouteImport } from './routes/edit-profile'
+import { Route as FoodDashboardRouteImport } from './routes/food-dashboard'
+import { Route as MedicationDashboardRouteImport } from './routes/medication-dashboard'
+import { Route as ProfileRouteImport } from './routes/profile'
+import { Route as SleepDashboardRouteImport } from './routes/sleep-dashboard'
+import { Route as StepsDashboardRouteImport } from './routes/steps-dashboard'
+import { Route as WaterDashboardRouteImport } from './routes/water-dashboard'
 
-const WaterDashboardRoute = WaterDashboardRouteImport.update({
-  id: '/water-dashboard',
-  path: '/water-dashboard',
+const IndexRoute = IndexRouteImport.update({
+  id: '/',
+  path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
-const StepsDashboardRoute = StepsDashboardRouteImport.update({
-  id: '/steps-dashboard',
-  path: '/steps-dashboard',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const SleepDashboardRoute = SleepDashboardRouteImport.update({
-  id: '/sleep-dashboard',
-  path: '/sleep-dashboard',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ProfileRoute = ProfileRouteImport.update({
-  id: '/profile',
-  path: '/profile',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const MedicationDashboardRoute = MedicationDashboardRouteImport.update({
-  id: '/medication-dashboard',
-  path: '/medication-dashboard',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const FoodDashboardRoute = FoodDashboardRouteImport.update({
-  id: '/food-dashboard',
-  path: '/food-dashboard',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const EditProfileRoute = EditProfileRouteImport.update({
-  id: '/edit-profile',
-  path: '/edit-profile',
+const AiAssistantRoute = AiAssistantRouteImport.update({
+  id: '/ai-assistant',
+  path: '/ai-assistant',
   getParentRoute: () => rootRouteImport,
 } as any)
 const DashboardRoute = DashboardRouteImport.update({
@@ -59,14 +35,45 @@ const DashboardRoute = DashboardRouteImport.update({
   path: '/dashboard',
   getParentRoute: () => rootRouteImport,
 } as any)
-const IndexRoute = IndexRouteImport.update({
-  id: '/',
-  path: '/',
+const EditProfileRoute = EditProfileRouteImport.update({
+  id: '/edit-profile',
+  path: '/edit-profile',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const FoodDashboardRoute = FoodDashboardRouteImport.update({
+  id: '/food-dashboard',
+  path: '/food-dashboard',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const MedicationDashboardRoute = MedicationDashboardRouteImport.update({
+  id: '/medication-dashboard',
+  path: '/medication-dashboard',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ProfileRoute = ProfileRouteImport.update({
+  id: '/profile',
+  path: '/profile',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SleepDashboardRoute = SleepDashboardRouteImport.update({
+  id: '/sleep-dashboard',
+  path: '/sleep-dashboard',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const StepsDashboardRoute = StepsDashboardRouteImport.update({
+  id: '/steps-dashboard',
+  path: '/steps-dashboard',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const WaterDashboardRoute = WaterDashboardRouteImport.update({
+  id: '/water-dashboard',
+  path: '/water-dashboard',
   getParentRoute: () => rootRouteImport,
 } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/ai-assistant': typeof AiAssistantRoute
   '/dashboard': typeof DashboardRoute
   '/edit-profile': typeof EditProfileRoute
   '/food-dashboard': typeof FoodDashboardRoute
@@ -78,6 +85,7 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/ai-assistant': typeof AiAssistantRoute
   '/dashboard': typeof DashboardRoute
   '/edit-profile': typeof EditProfileRoute
   '/food-dashboard': typeof FoodDashboardRoute
@@ -90,6 +98,7 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/ai-assistant': typeof AiAssistantRoute
   '/dashboard': typeof DashboardRoute
   '/edit-profile': typeof EditProfileRoute
   '/food-dashboard': typeof FoodDashboardRoute
@@ -103,6 +112,7 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/ai-assistant'
     | '/dashboard'
     | '/edit-profile'
     | '/food-dashboard'
@@ -114,6 +124,7 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/ai-assistant'
     | '/dashboard'
     | '/edit-profile'
     | '/food-dashboard'
@@ -125,6 +136,7 @@ export interface FileRouteTypes {
   id:
     | '__root__'
     | '/'
+    | '/ai-assistant'
     | '/dashboard'
     | '/edit-profile'
     | '/food-dashboard'
@@ -137,6 +149,7 @@ export interface FileRouteTypes {
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AiAssistantRoute: typeof AiAssistantRoute
   DashboardRoute: typeof DashboardRoute
   EditProfileRoute: typeof EditProfileRoute
   FoodDashboardRoute: typeof FoodDashboardRoute
@@ -149,53 +162,18 @@ export interface RootRouteChildren {
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/water-dashboard': {
-      id: '/water-dashboard'
-      path: '/water-dashboard'
-      fullPath: '/water-dashboard'
-      preLoaderRoute: typeof WaterDashboardRouteImport
+    '/': {
+      id: '/'
+      path: '/'
+      fullPath: '/'
+      preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/steps-dashboard': {
-      id: '/steps-dashboard'
-      path: '/steps-dashboard'
-      fullPath: '/steps-dashboard'
-      preLoaderRoute: typeof StepsDashboardRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/sleep-dashboard': {
-      id: '/sleep-dashboard'
-      path: '/sleep-dashboard'
-      fullPath: '/sleep-dashboard'
-      preLoaderRoute: typeof SleepDashboardRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/profile': {
-      id: '/profile'
-      path: '/profile'
-      fullPath: '/profile'
-      preLoaderRoute: typeof ProfileRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/medication-dashboard': {
-      id: '/medication-dashboard'
-      path: '/medication-dashboard'
-      fullPath: '/medication-dashboard'
-      preLoaderRoute: typeof MedicationDashboardRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/food-dashboard': {
-      id: '/food-dashboard'
-      path: '/food-dashboard'
-      fullPath: '/food-dashboard'
-      preLoaderRoute: typeof FoodDashboardRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/edit-profile': {
-      id: '/edit-profile'
-      path: '/edit-profile'
-      fullPath: '/edit-profile'
-      preLoaderRoute: typeof EditProfileRouteImport
+    '/ai-assistant': {
+      id: '/ai-assistant'
+      path: '/ai-assistant'
+      fullPath: '/ai-assistant'
+      preLoaderRoute: typeof AiAssistantRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/dashboard': {
@@ -205,11 +183,53 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DashboardRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/': {
-      id: '/'
-      path: '/'
-      fullPath: '/'
-      preLoaderRoute: typeof IndexRouteImport
+    '/edit-profile': {
+      id: '/edit-profile'
+      path: '/edit-profile'
+      fullPath: '/edit-profile'
+      preLoaderRoute: typeof EditProfileRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/food-dashboard': {
+      id: '/food-dashboard'
+      path: '/food-dashboard'
+      fullPath: '/food-dashboard'
+      preLoaderRoute: typeof FoodDashboardRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/medication-dashboard': {
+      id: '/medication-dashboard'
+      path: '/medication-dashboard'
+      fullPath: '/medication-dashboard'
+      preLoaderRoute: typeof MedicationDashboardRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/profile': {
+      id: '/profile'
+      path: '/profile'
+      fullPath: '/profile'
+      preLoaderRoute: typeof ProfileRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/sleep-dashboard': {
+      id: '/sleep-dashboard'
+      path: '/sleep-dashboard'
+      fullPath: '/sleep-dashboard'
+      preLoaderRoute: typeof SleepDashboardRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/steps-dashboard': {
+      id: '/steps-dashboard'
+      path: '/steps-dashboard'
+      fullPath: '/steps-dashboard'
+      preLoaderRoute: typeof StepsDashboardRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/water-dashboard': {
+      id: '/water-dashboard'
+      path: '/water-dashboard'
+      fullPath: '/water-dashboard'
+      preLoaderRoute: typeof WaterDashboardRouteImport
       parentRoute: typeof rootRouteImport
     }
   }
@@ -217,6 +237,7 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AiAssistantRoute: AiAssistantRoute,
   DashboardRoute: DashboardRoute,
   EditProfileRoute: EditProfileRoute,
   FoodDashboardRoute: FoodDashboardRoute,

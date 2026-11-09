@@ -19,8 +19,14 @@ interface WaterReminderNavigationPlugin {
   hasPendingWaterReminderAction(): Promise<{ pending: boolean }>;
 }
 
+interface MedicationReminderNavigationPlugin {
+  hasPendingActions(): Promise<{ pending: boolean }>;
+}
+
 const waterReminderNavigationPlugin =
   registerPlugin<WaterReminderNavigationPlugin>("WaterReminder");
+const medicationReminderNavigationPlugin =
+  registerPlugin<MedicationReminderNavigationPlugin>("MedicationReminders");
 
 function NotFoundComponent() {
   return (
@@ -84,14 +90,22 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "Lovable App" },
-      { name: "description", content: "Lovable Generated Project" },
-      { name: "author", content: "Lovable" },
-      { property: "og:title", content: "Lovable App" },
-      { property: "og:description", content: "Lovable Generated Project" },
+      { title: "HealthDrift AI" },
+      {
+        name: "description",
+        content:
+          "Comprehensive metabolic drift and health intelligence monitoring platform with real-time biometric tracking, sleep, hydration, and nutrition analytics.",
+      },
+      { name: "author", content: "HealthDrift AI" },
+      { property: "og:title", content: "HealthDrift AI" },
+      {
+        property: "og:description",
+        content:
+          "Comprehensive metabolic drift and health intelligence monitoring platform with real-time biometric tracking, sleep, hydration, and nutrition analytics.",
+      },
       { property: "og:type", content: "website" },
-      { name: "twitter:card", content: "summary" },
-      { name: "twitter:site", content: "@Lovable" },
+      { name: "twitter:card", content: "summary_large_image" },
+      { name: "twitter:site", content: "@HealthDriftAI" },
     ],
     links: [
       { rel: "stylesheet", href: appCss },
@@ -136,14 +150,8 @@ function RootComponent() {
     let active = true;
     const checkPendingAction = async () => {
       try {
-        const { pending } =
-          await waterReminderNavigationPlugin.hasPendingWaterReminderAction();
-        if (
-          active &&
-          pending &&
-          pathname !== "/water-dashboard" &&
-          pathname !== "/profile"
-        ) {
+        const { pending } = await waterReminderNavigationPlugin.hasPendingWaterReminderAction();
+        if (active && pending && pathname !== "/water-dashboard" && pathname !== "/profile") {
           await navigate({ to: "/water-dashboard" });
         }
       } catch (error) {
@@ -156,6 +164,34 @@ function RootComponent() {
       void checkPendingAction();
     }, 3_000);
 
+    return () => {
+      active = false;
+      window.clearInterval(interval);
+    };
+  }, [navigate, pathname]);
+
+  React.useEffect(() => {
+    if (
+      !Capacitor.isNativePlatform() ||
+      !Capacitor.isPluginAvailable("MedicationReminders") ||
+      pathname === "/medication-dashboard" ||
+      pathname === "/profile"
+    ) {
+      return;
+    }
+
+    let active = true;
+    const checkPendingAction = async () => {
+      try {
+        const { pending } = await medicationReminderNavigationPlugin.hasPendingActions();
+        if (active && pending) await navigate({ to: "/medication-dashboard" });
+      } catch (error) {
+        console.error("Unable to check for pending medication reminder actions", error);
+      }
+    };
+
+    void checkPendingAction();
+    const interval = window.setInterval(() => void checkPendingAction(), 3_000);
     return () => {
       active = false;
       window.clearInterval(interval);

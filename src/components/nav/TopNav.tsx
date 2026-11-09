@@ -27,7 +27,9 @@ export function TopNav() {
           <span className="font-display text-sm tracking-[0.3em] text-foreground/90">NEXUS</span>
         </Link>
 
-        <nav className={`hidden md:flex items-center gap-1 rounded-full px-2 py-1.5 transition-all ${scrolled ? "glass-strong" : ""}`}>
+        <nav
+          className={`hidden md:flex items-center gap-1 rounded-full px-2 py-1.5 transition-all ${scrolled ? "glass-strong" : ""}`}
+        >
           {[
             { label: "Predict", href: "#predict" },
             { label: "Analytics", href: "#analytics" },

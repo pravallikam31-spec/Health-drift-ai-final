@@ -7,7 +7,15 @@ import { Label } from "@/components/ui/label";
 import { toast } from "sonner";
 import { LogOut, Mail, RefreshCw } from "lucide-react";
 
-function Shell({ title, subtitle, children }: { title: string; subtitle?: string; children: React.ReactNode }) {
+function Shell({
+  title,
+  subtitle,
+  children,
+}: {
+  title: string;
+  subtitle?: string;
+  children: React.ReactNode;
+}) {
   return (
     <div className="relative min-h-screen bg-background text-foreground antialiased grid place-items-center px-6">
       <div className="w-full max-w-md glass-strong rounded-2xl p-8 border border-white/10">
@@ -54,21 +62,45 @@ function LoginScreen() {
   return (
     <Shell
       title={mode === "login" ? "Welcome back" : "Create your account"}
-      subtitle={mode === "login" ? "Sign in to continue to Health Drift AI" : "Predictive healthcare, personalized."}
+      subtitle={
+        mode === "login"
+          ? "Sign in to continue to Health Drift AI"
+          : "Predictive healthcare, personalized."
+      }
     >
       <form onSubmit={onSubmit} className="space-y-4">
         <div className="space-y-2">
           <Label htmlFor="email">Email</Label>
-          <Input id="email" type="email" required value={email} onChange={(e) => setEmail(e.target.value)} />
+          <Input
+            id="email"
+            type="email"
+            required
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+          />
         </div>
         <div className="space-y-2">
           <Label htmlFor="password">Password</Label>
-          <Input id="password" type="password" required minLength={6} value={password} onChange={(e) => setPassword(e.target.value)} />
+          <Input
+            id="password"
+            type="password"
+            required
+            minLength={6}
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+          />
         </div>
         {mode === "register" && (
           <div className="space-y-2">
             <Label htmlFor="confirm">Confirm Password</Label>
-            <Input id="confirm" type="password" required minLength={6} value={confirm} onChange={(e) => setConfirm(e.target.value)} />
+            <Input
+              id="confirm"
+              type="password"
+              required
+              minLength={6}
+              value={confirm}
+              onChange={(e) => setConfirm(e.target.value)}
+            />
           </div>
         )}
         <Button type="submit" disabled={busy} className="w-full">
@@ -79,12 +111,16 @@ function LoginScreen() {
         {mode === "login" ? (
           <>
             Don't have an account?{" "}
-            <button className="text-aurora hover:underline" onClick={() => setMode("register")}>Register</button>
+            <button className="text-aurora hover:underline" onClick={() => setMode("register")}>
+              Register
+            </button>
           </>
         ) : (
           <>
             Already have an account?{" "}
-            <button className="text-aurora hover:underline" onClick={() => setMode("login")}>Sign in</button>
+            <button className="text-aurora hover:underline" onClick={() => setMode("login")}>
+              Sign in
+            </button>
           </>
         )}
       </div>
@@ -148,7 +184,7 @@ function VerifyScreen() {
 }
 
 function Gate({ children }: { children: React.ReactNode }) {
-  const { user, loading, logout } = useAuth();
+  const { user, loading } = useAuth();
 
   if (loading) {
     return (
@@ -160,18 +196,7 @@ function Gate({ children }: { children: React.ReactNode }) {
   if (!user) return <LoginScreen />;
   if (!user.emailVerified) return <VerifyScreen />;
 
-  return (
-    <>
-      {children}
-      <button
-        onClick={() => logout()}
-        title="Logout"
-        className="fixed bottom-5 right-5 z-50 inline-flex items-center gap-2 rounded-full glass-strong px-4 py-2 text-xs font-medium uppercase tracking-[0.18em] text-foreground hover:bg-white/10 border border-white/10"
-      >
-        <LogOut className="h-3.5 w-3.5" /> Logout
-      </button>
-    </>
-  );
+  return <>{children}</>;
 }
 
 export function AuthGate({ children }: { children: React.ReactNode }) {

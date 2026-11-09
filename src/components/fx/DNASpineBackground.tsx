@@ -182,10 +182,8 @@ export function DNASpineBackground() {
       aria-hidden
       className="pointer-events-none fixed inset-0 -z-[1] overflow-hidden"
       style={{
-        maskImage:
-          "radial-gradient(ellipse 65% 95% at 78% 50%, black 35%, transparent 82%)",
-        WebkitMaskImage:
-          "radial-gradient(ellipse 65% 95% at 78% 50%, black 35%, transparent 82%)",
+        maskImage: "radial-gradient(ellipse 65% 95% at 78% 50%, black 35%, transparent 82%)",
+        WebkitMaskImage: "radial-gradient(ellipse 65% 95% at 78% 50%, black 35%, transparent 82%)",
       }}
     >
       <div className="absolute right-[-6%] top-1/2 -translate-y-1/2 h-[180vh] w-[85vw] md:w-[58vw]">
