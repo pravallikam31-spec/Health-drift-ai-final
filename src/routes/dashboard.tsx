@@ -127,7 +127,9 @@ function DashboardContent() {
   const { user } = useAuth();
   const navigate = useNavigate();
   const [profile, setProfile] = React.useState<ProfileData | null>(null);
-  const [healthAnalytics, setHealthAnalytics] = React.useState<HealthAnalyticsSnapshot | null>(null);
+  const [healthAnalytics, setHealthAnalytics] = React.useState<HealthAnalyticsSnapshot | null>(
+    null,
+  );
   const [expandedCard, setExpandedCard] = React.useState<"score" | "daily" | "weekly" | null>(null);
 
   React.useEffect(() => {
@@ -322,7 +324,14 @@ function DashboardContent() {
                 <div className="flex items-center justify-center py-2">
                   <div className="relative h-32 w-32">
                     <svg viewBox="0 0 220 220" className="h-full w-full -rotate-90">
-                      <circle cx="110" cy="110" r="72" stroke="rgba(255,255,255,0.08)" strokeWidth="14" fill="none" />
+                      <circle
+                        cx="110"
+                        cy="110"
+                        r="72"
+                        stroke="rgba(255,255,255,0.08)"
+                        strokeWidth="14"
+                        fill="none"
+                      />
                       <circle
                         cx="110"
                         cy="110"
@@ -344,8 +353,12 @@ function DashboardContent() {
                     </svg>
                     <div className="absolute inset-0 grid place-items-center">
                       <div className="text-center">
-                        <div className="text-3xl font-display text-white">{healthAnalytics.overallHds}</div>
-                        <div className="text-[10px] uppercase tracking-[0.2em] text-muted-foreground">/ 100</div>
+                        <div className="text-3xl font-display text-white">
+                          {healthAnalytics.overallHds}
+                        </div>
+                        <div className="text-[10px] uppercase tracking-[0.2em] text-muted-foreground">
+                          / 100
+                        </div>
                       </div>
                     </div>
                   </div>
@@ -354,33 +367,56 @@ function DashboardContent() {
                 <div className="mt-4 grid grid-cols-3 gap-2 text-center text-xs text-muted-foreground">
                   <div className="rounded-2xl border border-white/10 bg-black/10 p-2">
                     <div className="text-[9px] uppercase tracking-[0.2em]">Previous</div>
-                    <div className="mt-1 text-base font-medium text-white">{healthAnalytics.previousHds}</div>
+                    <div className="mt-1 text-base font-medium text-white">
+                      {healthAnalytics.previousHds}
+                    </div>
                   </div>
                   <div className="rounded-2xl border border-white/10 bg-black/10 p-2">
                     <div className="text-[9px] uppercase tracking-[0.2em]">Change</div>
-                    <div className={`mt-1 text-base font-medium ${healthAnalytics.change >= 0 ? "text-rose-300" : "text-emerald-300"}`}>
+                    <div
+                      className={`mt-1 text-base font-medium ${healthAnalytics.change >= 0 ? "text-rose-300" : "text-emerald-300"}`}
+                    >
                       {healthAnalytics.change >= 0 ? "+" : ""}
                       {healthAnalytics.change}
                     </div>
                   </div>
                   <div className="rounded-2xl border border-white/10 bg-black/10 p-2">
                     <div className="text-[9px] uppercase tracking-[0.2em]">Trend</div>
-                    <div className="mt-1 text-base font-medium text-cyan-200">{healthAnalytics.hdsTimeline.length ? "Live" : "N/A"}</div>
+                    <div className="mt-1 text-base font-medium text-cyan-200">
+                      {healthAnalytics.hdsTimeline.length ? "Live" : "N/A"}
+                    </div>
                   </div>
                 </div>
 
                 <div className="mt-5 h-20 w-full">
                   <ResponsiveContainer width="100%" height="100%">
-                    <LineChart data={healthAnalytics.hdsTimeline.length ? healthAnalytics.hdsTimeline : [{ label: "No data", value: 0, date: "today" }]}>
-                      <Line type="monotone" dataKey="value" stroke="#67e8f9" strokeWidth={2} dot={false} />
+                    <LineChart
+                      data={
+                        healthAnalytics.hdsTimeline.length
+                          ? healthAnalytics.hdsTimeline
+                          : [{ label: "No data", value: 0, date: "today" }]
+                      }
+                    >
+                      <Line
+                        type="monotone"
+                        dataKey="value"
+                        stroke="#67e8f9"
+                        strokeWidth={2}
+                        dot={false}
+                      />
                       <Tooltip />
                     </LineChart>
                   </ResponsiveContainer>
                 </div>
 
                 <div className="mt-4 rounded-2xl border border-white/10 bg-black/10 p-3 text-sm text-muted-foreground">
-                  <div className="mb-1 text-[10px] uppercase tracking-[0.2em] text-muted-foreground">Key drivers</div>
-                  <p>{healthAnalytics.insights[0] ?? "Data is still being collected to build a personalized baseline."}</p>
+                  <div className="mb-1 text-[10px] uppercase tracking-[0.2em] text-muted-foreground">
+                    Key drivers
+                  </div>
+                  <p>
+                    {healthAnalytics.insights[0] ??
+                      "Data is still being collected to build a personalized baseline."}
+                  </p>
                 </div>
               </>
             ) : (
@@ -399,7 +435,13 @@ function DashboardContent() {
               <div className="mt-5 space-y-5 border-t border-white/10 pt-5">
                 <div className="h-56 w-full">
                   <ResponsiveContainer width="100%" height="100%">
-                    <RadarChart data={healthAnalytics.radarData.length ? healthAnalytics.radarData : [{ subject: "No data", value: 0, fullMark: 100 }]}>
+                    <RadarChart
+                      data={
+                        healthAnalytics.radarData.length
+                          ? healthAnalytics.radarData
+                          : [{ subject: "No data", value: 0, fullMark: 100 }]
+                      }
+                    >
                       <PolarGrid stroke="rgba(255,255,255,0.08)" />
                       <PolarAngleAxis dataKey="subject" tick={{ fill: "#cbd5e1", fontSize: 10 }} />
                       <Radar dataKey="value" stroke="#67e8f9" fill="#67e8f9" fillOpacity={0.35} />
@@ -410,13 +452,19 @@ function DashboardContent() {
 
                 <div className="space-y-2">
                   {healthAnalytics.domains.map((domain) => (
-                    <div key={domain.key} className="rounded-2xl border border-white/10 bg-black/10 p-3">
+                    <div
+                      key={domain.key}
+                      className="rounded-2xl border border-white/10 bg-black/10 p-3"
+                    >
                       <div className="flex items-center justify-between gap-3">
                         <span className="text-sm font-medium text-foreground">{domain.label}</span>
                         <span className="text-sm text-cyan-200">{domain.score}</span>
                       </div>
                       <div className="mt-2 h-2 overflow-hidden rounded-full bg-white/5">
-                        <div className="h-full rounded-full bg-gradient-to-r from-cyan-400 via-violet-500 to-indigo-500" style={{ width: `${Math.max(domain.score, 5)}%` }} />
+                        <div
+                          className="h-full rounded-full bg-gradient-to-r from-cyan-400 via-violet-500 to-indigo-500"
+                          style={{ width: `${Math.max(domain.score, 5)}%` }}
+                        />
                       </div>
                     </div>
                   ))}
@@ -441,28 +489,41 @@ function DashboardContent() {
             {healthAnalytics ? (
               <>
                 <div className="rounded-2xl border border-white/10 bg-black/10 p-4">
-                  <div className="text-[10px] uppercase tracking-[0.2em] text-muted-foreground">Daily wellness score</div>
+                  <div className="text-[10px] uppercase tracking-[0.2em] text-muted-foreground">
+                    Daily wellness score
+                  </div>
                   <div className="mt-2 flex items-end justify-between gap-3">
-                    <div className="text-4xl font-display text-white">{healthAnalytics.dailyWellnessScore}</div>
+                    <div className="text-4xl font-display text-white">
+                      {healthAnalytics.dailyWellnessScore}
+                    </div>
                     <div className="text-xl font-medium text-emerald-300">/ 100</div>
                   </div>
                 </div>
 
                 <div className="mt-4 space-y-3">
-                  {healthAnalytics.domains.filter((domain) => domain.valid).slice(0, 4).map((domain) => (
-                    <div key={domain.key} className="rounded-2xl border border-white/10 bg-black/10 p-3">
-                      <div className="flex items-center justify-between gap-3 text-sm">
-                        <span className="font-medium text-foreground">{domain.label}</span>
-                        <span className="text-cyan-200">{domain.score}</span>
+                  {healthAnalytics.domains
+                    .filter((domain) => domain.valid)
+                    .slice(0, 4)
+                    .map((domain) => (
+                      <div
+                        key={domain.key}
+                        className="rounded-2xl border border-white/10 bg-black/10 p-3"
+                      >
+                        <div className="flex items-center justify-between gap-3 text-sm">
+                          <span className="font-medium text-foreground">{domain.label}</span>
+                          <span className="text-cyan-200">{domain.score}</span>
+                        </div>
+                        <p className="mt-2 text-xs text-muted-foreground">{domain.explanation}</p>
                       </div>
-                      <p className="mt-2 text-xs text-muted-foreground">{domain.explanation}</p>
-                    </div>
-                  ))}
+                    ))}
                 </div>
 
                 <div className="mt-4 space-y-2">
                   {healthAnalytics.insights.slice(0, 2).map((insight) => (
-                    <div key={insight} className="rounded-2xl border border-white/10 bg-black/10 p-3 text-sm text-muted-foreground">
+                    <div
+                      key={insight}
+                      className="rounded-2xl border border-white/10 bg-black/10 p-3 text-sm text-muted-foreground"
+                    >
                       {insight}
                     </div>
                   ))}
@@ -484,23 +545,46 @@ function DashboardContent() {
               <div className="mt-5 space-y-5 border-t border-white/10 pt-5">
                 <div className="grid gap-3 sm:grid-cols-2">
                   {[
-                    { label: "Sleep", value: healthAnalytics.domains.find((d) => d.key === "sleep")?.score ?? 0, explanation: "Sleep analysis" },
-                    { label: "Nutrition", value: healthAnalytics.domains.find((d) => d.key === "nutrition")?.score ?? 0, explanation: "Nutrition analysis" },
-                    { label: "Hydration", value: healthAnalytics.domains.find((d) => d.key === "hydration")?.score ?? 0, explanation: "Hydration status" },
-                    { label: "Activity", value: healthAnalytics.domains.find((d) => d.key === "activity")?.score ?? 0, explanation: "Physical activity" },
+                    {
+                      label: "Sleep",
+                      value: healthAnalytics.domains.find((d) => d.key === "sleep")?.score ?? 0,
+                      explanation: "Sleep analysis",
+                    },
+                    {
+                      label: "Nutrition",
+                      value: healthAnalytics.domains.find((d) => d.key === "nutrition")?.score ?? 0,
+                      explanation: "Nutrition analysis",
+                    },
+                    {
+                      label: "Hydration",
+                      value: healthAnalytics.domains.find((d) => d.key === "hydration")?.score ?? 0,
+                      explanation: "Hydration status",
+                    },
+                    {
+                      label: "Activity",
+                      value: healthAnalytics.domains.find((d) => d.key === "activity")?.score ?? 0,
+                      explanation: "Physical activity",
+                    },
                   ].map((item) => (
-                    <div key={item.label} className="rounded-2xl border border-white/10 bg-black/10 p-3">
+                    <div
+                      key={item.label}
+                      className="rounded-2xl border border-white/10 bg-black/10 p-3"
+                    >
                       <div className="flex items-center justify-between text-sm">
                         <span className="font-medium text-foreground">{item.label}</span>
                         <span className="text-cyan-200">{item.value}</span>
                       </div>
-                      <p className="mt-2 text-[11px] uppercase tracking-[0.2em] text-muted-foreground">{item.explanation}</p>
+                      <p className="mt-2 text-[11px] uppercase tracking-[0.2em] text-muted-foreground">
+                        {item.explanation}
+                      </p>
                     </div>
                   ))}
                 </div>
 
                 <div className="rounded-2xl border border-white/10 bg-black/10 p-4">
-                  <div className="mb-3 text-[10px] uppercase tracking-[0.2em] text-muted-foreground">Personalized recommendations</div>
+                  <div className="mb-3 text-[10px] uppercase tracking-[0.2em] text-muted-foreground">
+                    Personalized recommendations
+                  </div>
                   <ul className="space-y-2 text-sm text-foreground/90">
                     {healthAnalytics.recommendations.map((recommendation) => (
                       <li key={recommendation} className="flex gap-2">
@@ -531,21 +615,36 @@ function DashboardContent() {
               <>
                 <div className="grid grid-cols-2 gap-3">
                   <div className="rounded-2xl border border-white/10 bg-black/10 p-3">
-                    <div className="text-[10px] uppercase tracking-[0.2em] text-muted-foreground">Score</div>
-                    <div className="mt-2 text-2xl font-display text-white">{healthAnalytics.overallHds}</div>
+                    <div className="text-[10px] uppercase tracking-[0.2em] text-muted-foreground">
+                      Score
+                    </div>
+                    <div className="mt-2 text-2xl font-display text-white">
+                      {healthAnalytics.overallHds}
+                    </div>
                   </div>
                   <div className="rounded-2xl border border-white/10 bg-black/10 p-3">
-                    <div className="text-[10px] uppercase tracking-[0.2em] text-muted-foreground">Previous</div>
-                    <div className="mt-2 text-2xl font-display text-white">{healthAnalytics.previousHds}</div>
+                    <div className="text-[10px] uppercase tracking-[0.2em] text-muted-foreground">
+                      Previous
+                    </div>
+                    <div className="mt-2 text-2xl font-display text-white">
+                      {healthAnalytics.previousHds}
+                    </div>
                   </div>
                 </div>
 
                 <div className="mt-4 grid gap-3 md:grid-cols-2">
                   {healthAnalytics.weeklyMetrics.map((metric) => (
-                    <div key={metric.label} className="rounded-2xl border border-white/10 bg-black/10 p-3">
+                    <div
+                      key={metric.label}
+                      className="rounded-2xl border border-white/10 bg-black/10 p-3"
+                    >
                       <div className="flex items-center justify-between gap-3">
-                        <span className="text-[10px] uppercase tracking-[0.2em] text-muted-foreground">{metric.label}</span>
-                        <span className={`text-xs font-medium ${metric.tone === "negative" ? "text-rose-300" : metric.tone === "positive" ? "text-emerald-300" : "text-cyan-200"}`}>
+                        <span className="text-[10px] uppercase tracking-[0.2em] text-muted-foreground">
+                          {metric.label}
+                        </span>
+                        <span
+                          className={`text-xs font-medium ${metric.tone === "negative" ? "text-rose-300" : metric.tone === "positive" ? "text-emerald-300" : "text-cyan-200"}`}
+                        >
                           {metric.delta}
                         </span>
                       </div>
@@ -569,40 +668,65 @@ function DashboardContent() {
             {expandedCard === "weekly" && healthAnalytics && (
               <div className="mt-5 space-y-5 border-t border-white/10 pt-5">
                 <div className="rounded-2xl border border-white/10 bg-black/10 p-4">
-                  <div className="mb-3 text-[10px] uppercase tracking-[0.2em] text-muted-foreground">Weekly focus</div>
+                  <div className="mb-3 text-[10px] uppercase tracking-[0.2em] text-muted-foreground">
+                    Weekly focus
+                  </div>
                   <div className="space-y-3">
                     <div>
                       <div className="mb-1 flex items-center justify-between text-sm">
                         <span className="text-foreground">Sleep</span>
-                        <span className="text-cyan-200">{healthAnalytics.weeklyMetrics[0]?.value ?? "—"}</span>
+                        <span className="text-cyan-200">
+                          {healthAnalytics.weeklyMetrics[0]?.value ?? "—"}
+                        </span>
                       </div>
                       <div className="h-2 overflow-hidden rounded-full bg-white/5">
-                        <div className="h-full rounded-full bg-gradient-to-r from-indigo-500 via-cyan-500 to-teal-400" style={{ width: `${getProgressWidth(healthAnalytics.weeklyMetrics[0]?.value, 12, 20)}%` }} />
+                        <div
+                          className="h-full rounded-full bg-gradient-to-r from-indigo-500 via-cyan-500 to-teal-400"
+                          style={{
+                            width: `${getProgressWidth(healthAnalytics.weeklyMetrics[0]?.value, 12, 20)}%`,
+                          }}
+                        />
                       </div>
                     </div>
                     <div>
                       <div className="mb-1 flex items-center justify-between text-sm">
                         <span className="text-foreground">Water</span>
-                        <span className="text-cyan-200">{healthAnalytics.weeklyMetrics[1]?.value ?? "—"}</span>
+                        <span className="text-cyan-200">
+                          {healthAnalytics.weeklyMetrics[1]?.value ?? "—"}
+                        </span>
                       </div>
                       <div className="h-2 overflow-hidden rounded-full bg-white/5">
-                        <div className="h-full rounded-full bg-gradient-to-r from-cyan-500 via-sky-500 to-blue-500" style={{ width: `${getProgressWidth(healthAnalytics.weeklyMetrics[1]?.value, 20, 20)}%` }} />
+                        <div
+                          className="h-full rounded-full bg-gradient-to-r from-cyan-500 via-sky-500 to-blue-500"
+                          style={{
+                            width: `${getProgressWidth(healthAnalytics.weeklyMetrics[1]?.value, 20, 20)}%`,
+                          }}
+                        />
                       </div>
                     </div>
                     <div>
                       <div className="mb-1 flex items-center justify-between text-sm">
                         <span className="text-foreground">Steps</span>
-                        <span className="text-cyan-200">{healthAnalytics.weeklyMetrics[2]?.value ?? "—"}</span>
+                        <span className="text-cyan-200">
+                          {healthAnalytics.weeklyMetrics[2]?.value ?? "—"}
+                        </span>
                       </div>
                       <div className="h-2 overflow-hidden rounded-full bg-white/5">
-                        <div className="h-full rounded-full bg-gradient-to-r from-emerald-500 via-teal-500 to-cyan-400" style={{ width: `${Math.min((healthAnalytics.domains.find((d) => d.key === "activity")?.score ?? 0), 100)}%` }} />
+                        <div
+                          className="h-full rounded-full bg-gradient-to-r from-emerald-500 via-teal-500 to-cyan-400"
+                          style={{
+                            width: `${Math.min(healthAnalytics.domains.find((d) => d.key === "activity")?.score ?? 0, 100)}%`,
+                          }}
+                        />
                       </div>
                     </div>
                   </div>
                 </div>
 
                 <div className="rounded-2xl border border-white/10 bg-black/10 p-4">
-                  <div className="mb-2 text-[10px] uppercase tracking-[0.2em] text-muted-foreground">Weekly improvements & attention</div>
+                  <div className="mb-2 text-[10px] uppercase tracking-[0.2em] text-muted-foreground">
+                    Weekly improvements & attention
+                  </div>
                   <ul className="space-y-2 text-sm text-foreground/90">
                     {healthAnalytics.recommendations.map((item) => (
                       <li key={item} className="flex gap-2">
@@ -615,7 +739,8 @@ function DashboardContent() {
 
                 {healthAnalytics.missingInputs.length > 0 && (
                   <div className="rounded-2xl border border-yellow-500/20 bg-yellow-500/5 p-4 text-sm text-yellow-100">
-                    Missing inputs: {healthAnalytics.missingInputs.join(", ")}. The model does not infer unavailable records.
+                    Missing inputs: {healthAnalytics.missingInputs.join(", ")}. The model does not
+                    infer unavailable records.
                   </div>
                 )}
               </div>
@@ -684,7 +809,6 @@ function DashboardContent() {
           ))}
         </div>
       </div>
-
     </div>
   );
 }
