@@ -10,19 +10,29 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as ActivitiesRouteImport } from './routes/activities'
 import { Route as AiAssistantRouteImport } from './routes/ai-assistant'
 import { Route as DashboardRouteImport } from './routes/dashboard'
 import { Route as EditProfileRouteImport } from './routes/edit-profile'
 import { Route as FoodDashboardRouteImport } from './routes/food-dashboard'
+import { Route as HypertensionMazeRouteImport } from './routes/hypertension-maze'
 import { Route as MedicationDashboardRouteImport } from './routes/medication-dashboard'
+import { Route as NutritionSudokuRouteImport } from './routes/nutrition-sudoku'
 import { Route as ProfileRouteImport } from './routes/profile'
+import { Route as SitChallengeRouteImport } from './routes/sit-challenge'
 import { Route as SleepDashboardRouteImport } from './routes/sleep-dashboard'
 import { Route as StepsDashboardRouteImport } from './routes/steps-dashboard'
+import { Route as StroopTestRouteImport } from './routes/stroop-test'
 import { Route as WaterDashboardRouteImport } from './routes/water-dashboard'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ActivitiesRoute = ActivitiesRouteImport.update({
+  id: '/activities',
+  path: '/activities',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AiAssistantRoute = AiAssistantRouteImport.update({
@@ -45,14 +55,29 @@ const FoodDashboardRoute = FoodDashboardRouteImport.update({
   path: '/food-dashboard',
   getParentRoute: () => rootRouteImport,
 } as any)
+const HypertensionMazeRoute = HypertensionMazeRouteImport.update({
+  id: '/hypertension-maze',
+  path: '/hypertension-maze',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const MedicationDashboardRoute = MedicationDashboardRouteImport.update({
   id: '/medication-dashboard',
   path: '/medication-dashboard',
   getParentRoute: () => rootRouteImport,
 } as any)
+const NutritionSudokuRoute = NutritionSudokuRouteImport.update({
+  id: '/nutrition-sudoku',
+  path: '/nutrition-sudoku',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ProfileRoute = ProfileRouteImport.update({
   id: '/profile',
   path: '/profile',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SitChallengeRoute = SitChallengeRouteImport.update({
+  id: '/sit-challenge',
+  path: '/sit-challenge',
   getParentRoute: () => rootRouteImport,
 } as any)
 const SleepDashboardRoute = SleepDashboardRouteImport.update({
@@ -65,6 +90,11 @@ const StepsDashboardRoute = StepsDashboardRouteImport.update({
   path: '/steps-dashboard',
   getParentRoute: () => rootRouteImport,
 } as any)
+const StroopTestRoute = StroopTestRouteImport.update({
+  id: '/stroop-test',
+  path: '/stroop-test',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const WaterDashboardRoute = WaterDashboardRouteImport.update({
   id: '/water-dashboard',
   path: '/water-dashboard',
@@ -73,90 +103,125 @@ const WaterDashboardRoute = WaterDashboardRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/activities': typeof ActivitiesRoute
   '/ai-assistant': typeof AiAssistantRoute
   '/dashboard': typeof DashboardRoute
   '/edit-profile': typeof EditProfileRoute
   '/food-dashboard': typeof FoodDashboardRoute
+  '/hypertension-maze': typeof HypertensionMazeRoute
   '/medication-dashboard': typeof MedicationDashboardRoute
+  '/nutrition-sudoku': typeof NutritionSudokuRoute
   '/profile': typeof ProfileRoute
+  '/sit-challenge': typeof SitChallengeRoute
   '/sleep-dashboard': typeof SleepDashboardRoute
   '/steps-dashboard': typeof StepsDashboardRoute
+  '/stroop-test': typeof StroopTestRoute
   '/water-dashboard': typeof WaterDashboardRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/activities': typeof ActivitiesRoute
   '/ai-assistant': typeof AiAssistantRoute
   '/dashboard': typeof DashboardRoute
   '/edit-profile': typeof EditProfileRoute
   '/food-dashboard': typeof FoodDashboardRoute
+  '/hypertension-maze': typeof HypertensionMazeRoute
   '/medication-dashboard': typeof MedicationDashboardRoute
+  '/nutrition-sudoku': typeof NutritionSudokuRoute
   '/profile': typeof ProfileRoute
+  '/sit-challenge': typeof SitChallengeRoute
   '/sleep-dashboard': typeof SleepDashboardRoute
   '/steps-dashboard': typeof StepsDashboardRoute
+  '/stroop-test': typeof StroopTestRoute
   '/water-dashboard': typeof WaterDashboardRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/activities': typeof ActivitiesRoute
   '/ai-assistant': typeof AiAssistantRoute
   '/dashboard': typeof DashboardRoute
   '/edit-profile': typeof EditProfileRoute
   '/food-dashboard': typeof FoodDashboardRoute
+  '/hypertension-maze': typeof HypertensionMazeRoute
   '/medication-dashboard': typeof MedicationDashboardRoute
+  '/nutrition-sudoku': typeof NutritionSudokuRoute
   '/profile': typeof ProfileRoute
+  '/sit-challenge': typeof SitChallengeRoute
   '/sleep-dashboard': typeof SleepDashboardRoute
   '/steps-dashboard': typeof StepsDashboardRoute
+  '/stroop-test': typeof StroopTestRoute
   '/water-dashboard': typeof WaterDashboardRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/activities'
     | '/ai-assistant'
     | '/dashboard'
     | '/edit-profile'
     | '/food-dashboard'
+    | '/hypertension-maze'
     | '/medication-dashboard'
+    | '/nutrition-sudoku'
     | '/profile'
+    | '/sit-challenge'
     | '/sleep-dashboard'
     | '/steps-dashboard'
+    | '/stroop-test'
     | '/water-dashboard'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/activities'
     | '/ai-assistant'
     | '/dashboard'
     | '/edit-profile'
     | '/food-dashboard'
+    | '/hypertension-maze'
     | '/medication-dashboard'
+    | '/nutrition-sudoku'
     | '/profile'
+    | '/sit-challenge'
     | '/sleep-dashboard'
     | '/steps-dashboard'
+    | '/stroop-test'
     | '/water-dashboard'
   id:
     | '__root__'
     | '/'
+    | '/activities'
     | '/ai-assistant'
     | '/dashboard'
     | '/edit-profile'
     | '/food-dashboard'
+    | '/hypertension-maze'
     | '/medication-dashboard'
+    | '/nutrition-sudoku'
     | '/profile'
+    | '/sit-challenge'
     | '/sleep-dashboard'
     | '/steps-dashboard'
+    | '/stroop-test'
     | '/water-dashboard'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  ActivitiesRoute: typeof ActivitiesRoute
   AiAssistantRoute: typeof AiAssistantRoute
   DashboardRoute: typeof DashboardRoute
   EditProfileRoute: typeof EditProfileRoute
   FoodDashboardRoute: typeof FoodDashboardRoute
+  HypertensionMazeRoute: typeof HypertensionMazeRoute
   MedicationDashboardRoute: typeof MedicationDashboardRoute
+  NutritionSudokuRoute: typeof NutritionSudokuRoute
   ProfileRoute: typeof ProfileRoute
+  SitChallengeRoute: typeof SitChallengeRoute
   SleepDashboardRoute: typeof SleepDashboardRoute
   StepsDashboardRoute: typeof StepsDashboardRoute
+  StroopTestRoute: typeof StroopTestRoute
   WaterDashboardRoute: typeof WaterDashboardRoute
 }
 
@@ -167,6 +232,13 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/activities': {
+      id: '/activities'
+      path: '/activities'
+      fullPath: '/activities'
+      preLoaderRoute: typeof ActivitiesRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/ai-assistant': {
@@ -197,6 +269,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof FoodDashboardRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/hypertension-maze': {
+      id: '/hypertension-maze'
+      path: '/hypertension-maze'
+      fullPath: '/hypertension-maze'
+      preLoaderRoute: typeof HypertensionMazeRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/medication-dashboard': {
       id: '/medication-dashboard'
       path: '/medication-dashboard'
@@ -204,11 +283,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof MedicationDashboardRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/nutrition-sudoku': {
+      id: '/nutrition-sudoku'
+      path: '/nutrition-sudoku'
+      fullPath: '/nutrition-sudoku'
+      preLoaderRoute: typeof NutritionSudokuRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/profile': {
       id: '/profile'
       path: '/profile'
       fullPath: '/profile'
       preLoaderRoute: typeof ProfileRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/sit-challenge': {
+      id: '/sit-challenge'
+      path: '/sit-challenge'
+      fullPath: '/sit-challenge'
+      preLoaderRoute: typeof SitChallengeRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/sleep-dashboard': {
@@ -225,6 +318,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof StepsDashboardRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/stroop-test': {
+      id: '/stroop-test'
+      path: '/stroop-test'
+      fullPath: '/stroop-test'
+      preLoaderRoute: typeof StroopTestRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/water-dashboard': {
       id: '/water-dashboard'
       path: '/water-dashboard'
@@ -237,14 +337,19 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  ActivitiesRoute: ActivitiesRoute,
   AiAssistantRoute: AiAssistantRoute,
   DashboardRoute: DashboardRoute,
   EditProfileRoute: EditProfileRoute,
   FoodDashboardRoute: FoodDashboardRoute,
+  HypertensionMazeRoute: HypertensionMazeRoute,
   MedicationDashboardRoute: MedicationDashboardRoute,
+  NutritionSudokuRoute: NutritionSudokuRoute,
   ProfileRoute: ProfileRoute,
+  SitChallengeRoute: SitChallengeRoute,
   SleepDashboardRoute: SleepDashboardRoute,
   StepsDashboardRoute: StepsDashboardRoute,
+  StroopTestRoute: StroopTestRoute,
   WaterDashboardRoute: WaterDashboardRoute,
 }
 export const routeTree = rootRouteImport

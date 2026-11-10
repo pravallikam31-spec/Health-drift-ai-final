@@ -661,7 +661,7 @@ function DashboardContent() {
               title: "Activities",
               icon: <BrainCircuit className="w-10 h-10 text-blue-400 mb-6" />,
               subtitle: "Brain exercises and wellness activities.",
-              onClick: null,
+              onClick: () => navigate({ to: "/activities" }),
             },
             {
               title: "AI Assistant",
